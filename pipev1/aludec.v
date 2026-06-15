@@ -18,10 +18,7 @@ module aludec(input  opb5,
                             ALUControl_reg = 3'b001; // sub
                           else          
                             ALUControl_reg = 3'b000; // add, addi
-                 3'b001:    ALUControl_reg = 3'b110; // sll, slli
                  3'b010:    ALUControl_reg = 3'b101; // slt, slti
-                 3'b100:    ALUControl_reg = 3'b100; // xor, xori
-                 3'b101:    ALUControl_reg = 3'b111; // srl, srli
                  3'b110:    ALUControl_reg = 3'b011; // or, ori
                  3'b111:    ALUControl_reg = 3'b010; // and, andi
                  default:   ALUControl_reg = 3'bxxx; // ???
