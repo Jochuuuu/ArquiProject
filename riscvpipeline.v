@@ -33,9 +33,10 @@ module riscvpipeline(input  clk, reset,
   wire       funct7b5D;
   wire [4:0] Rs1D, Rs2D, RdD;
   wire [31:0] RD1D, RD2D, RD1RawD, RD2RawD, ImmExtD;
-  wire [1:0] ResultSrcD, ImmSrcD;
+  wire [1:0] ResultSrcD;
+  wire [2:0] ImmSrcD;
   wire       MemWriteD, PCSrcE, ALUSrcD, RegWriteD, JumpD;
-  wire [2:0] ALUControlD;
+  wire [3:0] ALUControlD;
 
   always @(posedge clk or posedge reset) begin
     if (reset || FlushD) begin
@@ -93,23 +94,27 @@ module riscvpipeline(input  clk, reset,
 
   // Execute stage
   reg [1:0]  ResultSrcE;
+  reg [2:0]  ImmSrcE;
   reg        MemWriteE, ALUSrcE, RegWriteE, JumpE, BranchE;
-  reg [2:0]  ALUControlE;
+  reg [3:0]  ALUControlE;
+  reg [2:0]  funct3E;
   reg [31:0] RD1E, RD2E, PCE, Rs1EData, Rs2EData, ImmExtE, PCPlus4E;
   reg [4:0]  Rs1E, Rs2E, RdE;
   wire [31:0] SrcAE, SrcBE, WriteDataE, ALUResultE, PCTargetE;
-  wire        ZeroE;
+  wire        ZeroE, EqualE, LessThanE, BranchTakenE;
   wire [1:0]  ForwardAE, ForwardBE;
 
   always @(posedge clk or posedge reset) begin
     if (reset || FlushE) begin
       ResultSrcE <= 2'b0;
+      ImmSrcE    <= 3'b0;
       MemWriteE  <= 1'b0;
       ALUSrcE    <= 1'b0;
       RegWriteE  <= 1'b0;
       JumpE      <= 1'b0;
       BranchE    <= 1'b0;
-      ALUControlE <= 3'b0;
+      ALUControlE <= 4'b0;
+      funct3E    <= 3'b0;
       RD1E       <= 32'b0;
       RD2E       <= 32'b0;
       PCE        <= 32'b0;
@@ -120,12 +125,14 @@ module riscvpipeline(input  clk, reset,
       RdE        <= 5'b0;
     end else begin
       ResultSrcE <= ResultSrcD;
+      ImmSrcE    <= ImmSrcD;
       MemWriteE  <= MemWriteD;
       ALUSrcE    <= ALUSrcD;
       RegWriteE  <= RegWriteD;
       JumpE      <= JumpD;
       BranchE    <= (opD == 7'b1100011);
       ALUControlE <= ALUControlD;
+      funct3E    <= funct3D;
       RD1E       <= RD1D;
       RD2E       <= RD2D;
       PCE        <= PCD;
@@ -174,7 +181,16 @@ module riscvpipeline(input  clk, reset,
     .y(PCTargetE)
   );
 
-  assign PCSrcE = (BranchE & ZeroE) | JumpE;
+  assign EqualE = (SrcAE == WriteDataE);
+  assign LessThanE = ($signed(SrcAE) < $signed(WriteDataE));
+
+  assign BranchTakenE = (funct3E == 3'b000) ? EqualE :       // beq
+                        (funct3E == 3'b001) ? ~EqualE :      // bne
+                        (funct3E == 3'b100) ? LessThanE :    // blt
+                        (funct3E == 3'b101) ? ~LessThanE :   // bge
+                        1'b0;
+
+  assign PCSrcE = (BranchE & BranchTakenE) | JumpE;
 
   mux2 #(32) pcmux(
     .d0(PCPlus4F),

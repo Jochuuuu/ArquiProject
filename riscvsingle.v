@@ -9,8 +9,9 @@ module riscvsingle(input  clk, reset,
   wire [31:0] ALUResult; 
   
   wire       ALUSrc, RegWrite, Jump, Zero; 
-  wire [1:0] ResultSrc, ImmSrc; 
-  wire [2:0] ALUControl; 
+  wire [1:0] ResultSrc; 
+  wire [2:0] ImmSrc;
+  wire [3:0] ALUControl; 
   wire       PCSrc; 
 
   // DataAdr is connected to ALUResult
