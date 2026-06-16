@@ -95,12 +95,12 @@ module riscvpipeline(input  clk, reset,
   // Execute stage
   reg [1:0]  ResultSrcE;
   reg [2:0]  ImmSrcE;
-  reg        MemWriteE, ALUSrcE, RegWriteE, JumpE, BranchE;
+  reg        MemWriteE, ALUSrcE, RegWriteE, JumpE, JalrE, BranchE;
   reg [3:0]  ALUControlE;
   reg [2:0]  funct3E;
   reg [31:0] RD1E, RD2E, PCE, Rs1EData, Rs2EData, ImmExtE, PCPlus4E;
   reg [4:0]  Rs1E, Rs2E, RdE;
-  wire [31:0] SrcAE, SrcBE, WriteDataE, ALUResultE, PCTargetE;
+  wire [31:0] SrcAE, SrcBE, WriteDataE, ALUResultE, PCTargetE, PCTargetJalrE, PCJumpTargetE;
   wire        ZeroE, EqualE, LessThanE, BranchTakenE;
   wire [1:0]  ForwardAE, ForwardBE;
 
@@ -112,6 +112,7 @@ module riscvpipeline(input  clk, reset,
       ALUSrcE    <= 1'b0;
       RegWriteE  <= 1'b0;
       JumpE      <= 1'b0;
+      JalrE      <= 1'b0;
       BranchE    <= 1'b0;
       ALUControlE <= 4'b0;
       funct3E    <= 3'b0;
@@ -130,6 +131,7 @@ module riscvpipeline(input  clk, reset,
       ALUSrcE    <= ALUSrcD;
       RegWriteE  <= RegWriteD;
       JumpE      <= JumpD;
+      JalrE      <= (opD == 7'b1100111);
       BranchE    <= (opD == 7'b1100011);
       ALUControlE <= ALUControlD;
       funct3E    <= funct3D;
@@ -181,6 +183,9 @@ module riscvpipeline(input  clk, reset,
     .y(PCTargetE)
   );
 
+  assign PCTargetJalrE = (SrcAE + ImmExtE) & 32'hfffffffe;
+  assign PCJumpTargetE = JalrE ? PCTargetJalrE : PCTargetE;
+
   assign EqualE = (SrcAE == WriteDataE);
   assign LessThanE = ($signed(SrcAE) < $signed(WriteDataE));
 
@@ -194,7 +199,7 @@ module riscvpipeline(input  clk, reset,
 
   mux2 #(32) pcmux(
     .d0(PCPlus4F),
-    .d1(PCTargetE),
+    .d1(PCJumpTargetE),
     .s(PCSrcE),
     .y(PCNextF)
   );

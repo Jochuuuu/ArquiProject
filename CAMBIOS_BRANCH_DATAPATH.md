@@ -127,7 +127,88 @@ En `alu.v` se agrego:
 4'b1001: result_reg = b; // lui/pass immediate
 ```
 
-## 4. Que se agrego al datapath original del pipeline
+## 4. JALR
+
+Se agrego soporte para:
+
+- `jalr rd, rs1, imm`
+
+`jalr` realiza:
+
+```text
+rd = PC + 4
+PC = (rs1 + imm) & ~1
+```
+
+### Cambios realizados
+
+En `maindec.v` se agrego el opcode:
+
+```verilog
+7'b1100111: controls = 12'b1_000_1_0_10_0_00_1; // jalr
+```
+
+Esto configura:
+
+- `RegWrite = 1`, para escribir `PC + 4` en `rd`.
+- `ImmSrc = 000`, porque `jalr` usa inmediato I-type.
+- `ALUSrc = 1`.
+- `ResultSrc = 10`, para seleccionar `PCPlus4` en Writeback.
+- `Jump = 1`, para activar el cambio de PC y el flush.
+
+En `riscvpipeline.v` se agrego:
+
+- Registro de control `JalrE`.
+- Calculo de target para `jalr`:
+
+```verilog
+assign PCTargetJalrE = (SrcAE + ImmExtE) & 32'hfffffffe;
+```
+
+- Seleccion entre target normal y target `jalr`:
+
+```verilog
+assign PCJumpTargetE = JalrE ? PCTargetJalrE : PCTargetE;
+```
+
+El mux del PC ahora usa `PCJumpTargetE`:
+
+```verilog
+mux2 #(32) pcmux(
+  .d0(PCPlus4F),
+  .d1(PCJumpTargetE),
+  .s(PCSrcE),
+  .y(PCNextF)
+);
+```
+
+### Efecto en Hazard Unit
+
+`jalr` usa `rs1`, por lo que puede depender de una instruccion anterior. El forwarding existente ayuda porque el target se calcula con `SrcAE`, que ya pasa por el mux de forwarding.
+
+Ejemplo:
+
+```asm
+addi x5, x0, 16
+jalr x1, x5, 0
+```
+
+El valor de `x5` puede reenviarse hacia `SrcAE` para calcular el target.
+
+El stall load-use tambien aplica naturalmente, porque la Hazard Unit ya compara `Rs1D` contra `RdE`.
+
+### Efecto en Flush
+
+`jalr` activa `JumpE`, por lo tanto tambien activa `PCSrcE`. La logica existente:
+
+```verilog
+assign FlushD = PCSrcE;
+assign FlushE = StallD | PCSrcE;
+```
+
+limpia las instrucciones incorrectas despues del salto.
+
+## 5. Que se agrego al datapath original del pipeline
 
 Sobre el datapath pipeline original se agregaron estas partes:
 
@@ -152,17 +233,24 @@ Sobre el datapath pipeline original se agregaron estas partes:
 7. Operacion interna de ALU para `lui`:
    - pasar `ImmExt` como resultado de ALU.
 
+8. Calculo de target para `jalr`:
+   - `PCTargetJalrE = (SrcAE + ImmExtE) & ~1`.
+
+9. Mux/logica de seleccion del target del PC:
+   - `PCJumpTargetE` escoge entre `PCTargetE` y `PCTargetJalrE`.
+
 No se agrego una memoria nueva ni un nuevo banco de registros. El pipeline sigue teniendo las mismas 5 etapas:
 
 ```text
 Fetch -> Decode -> Execute -> Memory -> Writeback
 ```
 
-## 5. Programas de prueba agregados
+## 6. Programas de prueba agregados
 
 - `branch_test.mem`: prueba branches.
 - `srai_test.mem`: prueba `srai` / `sra`.
 - `lui_test.mem`: prueba `lui`.
+- `jalr_test.mem`: prueba `jalr`.
 
 ## Conclusion
 
