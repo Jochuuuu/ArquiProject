@@ -1,5 +1,8 @@
-FF000093
-4020D113
-402151B3
-01900293
-06502223
+// srai_test.mem
+// Prueba de desplazamiento aritmetico a la derecha.
+
+FF000093  // addi x1, x0, -16
+4020D113  // srai x2, x1, 2
+402151B3  // sra  x3, x2, x2
+01900293  // addi x5, x0, 25
+06502223  // sw   x5, 100(x0)

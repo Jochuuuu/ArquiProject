@@ -1,5 +1,8 @@
-01000293
-000280E7
-06300313
-06200313
-01900293
+// jalr_test.mem
+// Prueba de jalr: salta a la direccion guardada en x5.
+
+01000293  // addi x5, x0, 16
+000280E7  // jalr x1, 0(x5)    ; PC = x5 + 0, guarda retorno en x1
+06300313  // addi x6, x0, 99   ; debe descartarse por el salto
+06200313  // addi  x6, x0, 98   ; tambien queda fuera del flujo esperado
+01900293  // addi x5, x0, 25   ; destino en PC = 16

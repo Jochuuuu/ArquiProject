@@ -1,6 +1,9 @@
-00500093
-00108463
-06300113
-01900113
-06202223
-00000063
+// flushing_test.mem
+// Prueba de flush: el beq salta y elimina la instruccion incorrecta.
+
+00500093  // addi x1, x0, 5
+00108463  // beq  x1, x1, +8   ; salta porque x1 == x1
+06300113  // addi x2, x0, 99   ; debe descartarse por flush
+01900113  // addi x2, x0, 25   ; destino correcto del branch
+06202223  // sw   x2, 100(x0)
+00000063  // beq  x0, x0, +0   ; loop final

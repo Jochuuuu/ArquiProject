@@ -98,7 +98,7 @@ module riscvpipeline(input  clk, reset,
   reg        MemWriteE, ALUSrcE, RegWriteE, JumpE, JalrE, BranchE;
   reg [3:0]  ALUControlE;
   reg [2:0]  funct3E;
-  reg [31:0] RD1E, RD2E, PCE, Rs1EData, Rs2EData, ImmExtE, PCPlus4E;
+  reg [31:0] InstrE, RD1E, RD2E, PCE, Rs1EData, Rs2EData, ImmExtE, PCPlus4E;
   reg [4:0]  Rs1E, Rs2E, RdE;
   wire [31:0] SrcAE, SrcBE, WriteDataE, ALUResultE, PCTargetE, PCTargetJalrE, PCJumpTargetE;
   wire        ZeroE, EqualE, LessThanE, BranchTakenE;
@@ -116,6 +116,7 @@ module riscvpipeline(input  clk, reset,
       BranchE    <= 1'b0;
       ALUControlE <= 4'b0;
       funct3E    <= 3'b0;
+      InstrE      <= 32'h00000013;
       RD1E       <= 32'b0;
       RD2E       <= 32'b0;
       PCE        <= 32'b0;
@@ -135,6 +136,7 @@ module riscvpipeline(input  clk, reset,
       BranchE    <= (opD == 7'b1100011);
       ALUControlE <= ALUControlD;
       funct3E    <= funct3D;
+      InstrE      <= InstrD;
       RD1E       <= RD1D;
       RD2E       <= RD2D;
       PCE        <= PCD;
@@ -207,7 +209,7 @@ module riscvpipeline(input  clk, reset,
   // Memory stage
   reg [1:0]  ResultSrcM;
   reg        RegWriteM;
-  reg [31:0] PCPlus4M;
+  reg [31:0] InstrM, PCPlus4M;
   reg [4:0]  RdM;
 
   always @(posedge clk or posedge reset) begin
@@ -217,6 +219,7 @@ module riscvpipeline(input  clk, reset,
       RegWriteM  <= 1'b0;
       ALUResultM <= 32'b0;
       WriteDataM <= 32'b0;
+      InstrM     <= 32'h00000013;
       PCPlus4M   <= 32'b0;
       RdM        <= 5'b0;
     end else begin
@@ -225,6 +228,7 @@ module riscvpipeline(input  clk, reset,
       RegWriteM  <= RegWriteE;
       ALUResultM <= ALUResultE;
       WriteDataM <= WriteDataE;
+      InstrM     <= InstrE;
       PCPlus4M   <= PCPlus4E;
       RdM        <= RdE;
     end
@@ -232,12 +236,13 @@ module riscvpipeline(input  clk, reset,
 
   // Writeback stage
   reg [1:0]  ResultSrcW;
-  reg [31:0] ALUResultW, ReadDataW, PCPlus4W;
+  reg [31:0] InstrW, ALUResultW, ReadDataW, PCPlus4W;
 
   always @(posedge clk or posedge reset) begin
     if (reset) begin
       ResultSrcW <= 2'b0;
       RegWriteW  <= 1'b0;
+      InstrW     <= 32'h00000013;
       ALUResultW <= 32'b0;
       ReadDataW  <= 32'b0;
       PCPlus4W   <= 32'b0;
@@ -245,6 +250,7 @@ module riscvpipeline(input  clk, reset,
     end else begin
       ResultSrcW <= ResultSrcM;
       RegWriteW  <= RegWriteM;
+      InstrW     <= InstrM;
       ALUResultW <= ALUResultM;
       ReadDataW  <= ReadDataM;
       PCPlus4W   <= PCPlus4M;

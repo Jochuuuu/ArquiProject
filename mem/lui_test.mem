@@ -1,2 +1,5 @@
-123452B7
-06502223
+// lui_test.mem
+// Prueba de lui: carga un inmediato en la parte alta del registro.
+
+123452B7  // lui x5, 0x12345000
+06502223  // sw  x5, 100(x0)

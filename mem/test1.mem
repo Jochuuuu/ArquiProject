@@ -1,0 +1,7 @@
+00A00093  // addi x1, x0, 10    ; x1 = 10
+01400213  // addi x4, x0, 32    ; x4 = 32 (Nueva dirección destino para evitar stalls)
+00A00113  // addi x2, x0, 10    ; x2 = 10 (Separado de x1 para evitar dependencias)
+00308293  // addi x5, x0, 3     ; x5 = 3  (Adelantado para romper dependencias de datos)
+00500193  // addi x3, x0, 5     ; x3 = 5  (Relleno productivo antes del salto)
+00020367  // jalr x6, 0(x4)     ; PC = x4 + 0 = 32. x6 guarda retorno (28)
+00128133  // add  x2, x5, x1    ; DESTINO DEL SALTO (PC = 32): x2 = 3 + 10 = 13

@@ -1,7 +1,10 @@
-00C00213
-06402023
-06002083
-00108133
-00110193
-06302223
-00000063
+// stalling_test.mem
+// Prueba de load-use hazard: el lw necesita un stall antes del add.
+
+00C00213  // addi x4, x0, 12
+06402023  // sw   x4, 96(x0)
+06002083  // lw   x1, 96(x0)
+00108133  // add  x2, x1, x1   ; depende del lw, requiere stall
+00110193  // addi x3, x2, 1
+06302223  // sw   x3, 100(x0)
+00000063  // beq  x0, x0, +0   ; loop final

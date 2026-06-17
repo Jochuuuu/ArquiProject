@@ -1,5 +1,8 @@
-00600113
-00600193
-00311463
-06300213
-01900293
+// branch_test.mem
+// Prueba de branch bne. Como x2 == x3, el branch no se toma.
+
+00600113  // addi x2, x0, 6
+00600193  // addi x3, x0, 6
+00311463  // bne  x2, x3, +8  ; no salta porque x2 == x3
+06300213  // addi x4, x0, 99  ; se ejecuta si el branch no salta
+01900293  // addi x5, x0, 25

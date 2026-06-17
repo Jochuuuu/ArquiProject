@@ -1,7 +1,11 @@
-00A00093
-00F00113
-002081B3
-00118233
-401202B3
-06502223
-00000063
+// forwarding_test.mem
+// Prueba de forwarding entre instrucciones dependientes.
+
+00A00093  // addi x1, x0, 10
+00F00113  // addi x2, x0, 15
+002081B3  // add  x3, x1, x2   ; x3 = 25
+00118233  // add  x4, x3, x1   ; usa x3 por forwarding
+401202B3  // sub  x5, x4, x1   ; usa x4 por forwarding
+06502223  // sw   x5, 100(x0)
+00000063  // beq  x0, x0, +0   ; loop final
+    
