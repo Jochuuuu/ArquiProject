@@ -1,4 +1,4 @@
-module testbench;
+module testbench_nohazard;
   reg          clk;
   reg          reset;
   wire [31:0]  WriteData;
@@ -7,7 +7,7 @@ module testbench;
   reg          done;
 
   // instantiate device to be tested
-  top dut(
+  top_nohazard dut(
     .clk(clk),
     .reset(reset),
     .WriteData(WriteData),
@@ -17,9 +17,9 @@ module testbench;
 
   // Generate waveform file for GTKWave or other VCD viewers.
   initial begin
-    $dumpfile("riscv_pipe.vcd");
+    $dumpfile("riscv_nohazard.vcd");
     if ($test$plusargs("FULL_VCD")) begin
-      $dumpvars(0, testbench);
+      $dumpvars(0, testbench_nohazard);
     end else begin
       // Compact VCD: pipeline, ALU, memory, and register values.
       $dumpvars(0, clk);
@@ -27,8 +27,6 @@ module testbench;
 
       // Pipeline instruction flow.
       $dumpvars(0, dut.rvcore.PCF);
-      $dumpvars(0, dut.rvcore.RawInstrF);
-      $dumpvars(0, dut.rvcore.IsCompressedF);
       $dumpvars(0, dut.rvcore.InstrF);
       $dumpvars(0, dut.rvcore.InstrD);
       $dumpvars(0, dut.rvcore.InstrE);

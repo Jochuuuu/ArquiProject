@@ -1,0 +1,23 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+\begin{document}
+≈
+\section{Conclusion}
+
+La version final del procesador RISC-V pipeline amplia el conjunto de instrucciones respecto a \texttt{pipev1}, incorporando nuevas operaciones aritmeticas, logicas, desplazamientos, branches, \texttt{jalr} y \texttt{lui}. Ademas, se implemento una Hazard Unit capaz de resolver dependencias mediante forwarding, stalling y flushing.
+
+Las pruebas con programas sin dependencias, con forwarding, con load-use hazard y con flush demuestran que el datapath y la unidad de control funcionan correctamente. La comparacion con la version sin Hazard Unit evidencia que esta unidad es necesaria para evitar resultados incorrectos en presencia de dependencias de datos y hazards de control.
+
+\end{document}

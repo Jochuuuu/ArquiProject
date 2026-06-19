@@ -1,0 +1,44 @@
+// isa_no_dependencies_halfword.mem
+// Mismo programa que isa_no_dependencies.mem, pero en formato de 16 bits.
+// Cada instruccion de 32 bits usa dos lineas:
+//   1 halfword bajo
+//   2 halfword alto
+
+0093  //   de 00400093 ; addi x1, x0, 4
+0040  //  de 00400093
+
+0113  // low  de 00800113 ; addi x2, x0, 8
+0080  // high de 00800113
+
+0193  // low  de 00C00193 ; addi x3, x0, 12
+00C0  // high de 00C00193
+
+0213  // low  de 00D00213 ; addi x4, x0, 13
+00D0  // high de 00D00213
+
+0293  // low  de 01400293 ; addi x5, x0, 20
+0140  // high de 01400293
+
+8333  // low  de 00208333 ; add x6, x1, x2
+0020  // high de 00208333
+
+83B3  // low  de 404283B3 ; sub x7, x5, x4
+4042  // high de 404283B3
+
+E433  // low  de 0020E433 ; or x8, x1, x2
+0020  // high de 0020E433
+
+F4B3  // low  de 0051F4B3 ; and x9, x3, x5
+0051  // high de 0051F4B3
+
+A533  // low  de 0020A533 ; slt x10, x1, x2
+0020  // high de 0020A533
+
+0593  // low  de 01900593 ; addi x11, x0, 25
+0190  // high de 01900593
+
+2223  // low  de 06B02223 ; sw x11, 100(x0)
+06B0  // high de 06B02223
+
+0063  // low  de 00000063 ; beq x0, x0, +0
+0000  // high de 00000063

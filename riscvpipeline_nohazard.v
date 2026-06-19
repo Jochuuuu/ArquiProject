@@ -1,8 +1,6 @@
-module riscvpipeline(input  clk, reset,
+module riscvpipeline_nohazard(input  clk, reset,
                      output [31:0] PCF,
-                     input  [31:0] RawInstrF,
                      input  [31:0] InstrF,
-                     input         IsCompressedF,
                      output reg    MemWriteM,
                      output reg [31:0] ALUResultM, WriteDataM,
                      input  [31:0] ReadDataM);
@@ -22,7 +20,11 @@ module riscvpipeline(input  clk, reset,
     .q(PCF)
   );
 
-  assign PCPlus4F = PCF + (IsCompressedF ? 32'd2 : 32'd4);
+  adder pcadd4(
+    .a(PCF),
+    .b(32'd4),
+    .y(PCPlus4F)
+  );
 
   // Decode stage
   reg [31:0] InstrD, PCD, PCPlus4D;
@@ -265,17 +267,11 @@ module riscvpipeline(input  clk, reset,
   );
 
   // Hazard unit
-  assign ForwardAE = ((Rs1E != 5'b0) && (Rs1E == RdM) && RegWriteM) ? 2'b10 :
-                     ((Rs1E != 5'b0) && (Rs1E == RdW) && RegWriteW) ? 2'b01 :
-                     2'b00;
-
-  assign ForwardBE = ((Rs2E != 5'b0) && (Rs2E == RdM) && RegWriteM) ? 2'b10 :
-                     ((Rs2E != 5'b0) && (Rs2E == RdW) && RegWriteW) ? 2'b01 :
-                     2'b00;
-
-  assign StallD = ResultSrcE[0] && ((Rs1D == RdE) || (Rs2D == RdE));
-  assign StallF = StallD;
-  assign FlushD = PCSrcE;
-  assign FlushE = StallD | PCSrcE;
+  assign ForwardAE = 2'b00;
+  assign ForwardBE = 2'b00;
+  assign StallD = 1'b0;
+  assign StallF = 1'b0;
+  assign FlushD = 1'b0;
+  assign FlushE = 1'b0;
 
 endmodule

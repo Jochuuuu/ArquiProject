@@ -1,5 +1,5 @@
 $date
-	Tue Jun 16 19:01:58 2026
+	Wed Jun 17 17:37:50 2026
 $end
 $version
 	Icarus Verilog
@@ -23,237 +23,233 @@ $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 32 $ InstrF [31:0] $end
+$var wire 32 $ RawInstrF [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 % InstrD [31:0] $end
+$var wire 1 % IsCompressedF $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 & InstrE [31:0] $end
+$var wire 32 & InstrF [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 ' InstrM [31:0] $end
+$var reg 32 ' InstrD [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 ( InstrW [31:0] $end
+$var reg 32 ( InstrE [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 5 ) Rs1D [4:0] $end
+$var reg 32 ) InstrM [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 5 * Rs2D [4:0] $end
+$var reg 32 * InstrW [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 5 + RdE [4:0] $end
+$var wire 5 + Rs1D [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 5 , Rs1E [4:0] $end
+$var wire 5 , Rs2D [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 5 - Rs2E [4:0] $end
+$var reg 5 - RdE [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 2 . ResultSrcE [1:0] $end
+$var reg 5 . Rs1E [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 1 / StallF $end
+$var reg 5 / Rs2E [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 1 0 StallD $end
+$var reg 2 0 ResultSrcE [1:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 1 1 FlushD $end
+$var wire 1 1 StallF $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 1 2 FlushE $end
+$var wire 1 2 StallD $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 2 3 ForwardAE [1:0] $end
+$var wire 1 3 FlushD $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 2 4 ForwardBE [1:0] $end
+$var wire 1 4 FlushE $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 32 5 SrcAE [31:0] $end
+$var wire 2 5 ForwardAE [1:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 32 6 SrcBE [31:0] $end
+$var wire 2 6 ForwardBE [1:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 7 ImmExtE [31:0] $end
+$var wire 32 7 SrcAE [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 4 8 ALUControlE [3:0] $end
+$var wire 32 8 SrcBE [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 32 9 ALUResultE [31:0] $end
+$var reg 32 9 ImmExtE [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var wire 32 : WriteDataE [31:0] $end
+$var reg 4 : ALUControlE [3:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 ; ALUResultM [31:0] $end
+$var wire 32 ; ALUResultE [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 < WriteDataM [31:0] $end
+$var wire 32 < WriteDataE [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 1 = MemWriteM $end
-$upscope $end
-$upscope $end
-$upscope $end
-$scope module testbench $end
-$var wire 32 > DataAdr [31:0] $end
-$upscope $end
-$scope module testbench $end
-$var wire 32 ? WriteData [31:0] $end
-$upscope $end
-$scope module testbench $end
-$var wire 1 = MemWrite $end
-$upscope $end
-$scope module testbench $end
-$scope module dut $end
-$scope module rvcore $end
-$var wire 32 @ ResultW [31:0] $end
+$var reg 32 = ALUResultM [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 1 A RegWriteW $end
+$var reg 32 > WriteDataM [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 5 B RdW [4:0] $end
+$var reg 1 ? MemWriteM $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module testbench $end
+$var wire 32 @ DataAdr [31:0] $end
+$upscope $end
+$scope module testbench $end
+$var wire 32 A WriteData [31:0] $end
+$upscope $end
+$scope module testbench $end
+$var wire 1 ? MemWrite $end
+$upscope $end
+$scope module testbench $end
+$scope module dut $end
+$scope module rvcore $end
+$var wire 32 B ResultW [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$var reg 32 C ReadDataW [31:0] $end
+$var reg 1 C RegWriteW $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$scope module rf $end
-$var reg 32 D \rf[1] [31:0] $end
-$upscope $end
+$var reg 5 D RdW [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
-$scope module rf $end
-$var reg 32 E \rf[2] [31:0] $end
-$upscope $end
+$var reg 32 E ReadDataW [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -261,7 +257,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 F \rf[3] [31:0] $end
+$var reg 32 F \rf[1] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -270,7 +266,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 G \rf[4] [31:0] $end
+$var reg 32 G \rf[2] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -279,7 +275,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 H \rf[5] [31:0] $end
+$var reg 32 H \rf[3] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -288,7 +284,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 I \rf[6] [31:0] $end
+$var reg 32 I \rf[4] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -297,7 +293,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 J \rf[7] [31:0] $end
+$var reg 32 J \rf[5] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -306,7 +302,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 K \rf[8] [31:0] $end
+$var reg 32 K \rf[6] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -315,7 +311,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 L \rf[9] [31:0] $end
+$var reg 32 L \rf[7] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -324,7 +320,7 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 M \rf[10] [31:0] $end
+$var reg 32 M \rf[8] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -333,7 +329,25 @@ $scope module testbench $end
 $scope module dut $end
 $scope module rvcore $end
 $scope module rf $end
-$var reg 32 N \rf[11] [31:0] $end
+$var reg 32 N \rf[9] [31:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module testbench $end
+$scope module dut $end
+$scope module rvcore $end
+$scope module rf $end
+$var reg 32 O \rf[10] [31:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module testbench $end
+$scope module dut $end
+$scope module rvcore $end
+$scope module rf $end
+$var reg 32 P \rf[11] [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -344,6 +358,8 @@ $dumpall
 $end
 #0
 $dumpvars
+bx P
+bx O
 bx N
 bx M
 bx L
@@ -353,15 +369,15 @@ bx I
 bx H
 bx G
 bx F
-bx E
-bx D
-b0 C
+b0 E
+b0 D
+0C
 b0 B
-0A
+b0 A
 b0 @
-b0 ?
+0?
 b0 >
-0=
+b0 =
 b0 <
 b0 ;
 b0 :
@@ -370,23 +386,23 @@ b0 8
 b0 7
 b0 6
 b0 5
-b0 4
-b0 3
+04
+03
 02
 01
-00
-0/
+b0 0
+b0 /
 b0 .
 b0 -
 b0 ,
 b0 +
-b0 *
-b0 )
+b10011 *
+b10011 )
 b10011 (
 b10011 '
-b10011 &
-b10011 %
-b110000000000001000010011 $
+b10000000000000010010011 &
+0%
+b10000000000000010010011 $
 b0 #
 1"
 1!
@@ -404,244 +420,378 @@ $end
 #25
 0!
 #30
-b1100 *
-b110010000000010000000100011 $
-bx C
-b110000000000001000010011 %
+b100000000000000100010011 $
+b100000000000000100010011 &
+b100 ,
+bx E
+b10000000000000010010011 '
 b100 #
 1!
 #35
 0!
 #40
-b1100 9
-bx :
-b110000000000010000010000011 $
-b100 *
-b1100 6
+b110000000000000110010011 $
+b110000000000000110010011 &
+b100 ;
+bx <
+b1000 ,
+b100 8
 b1000 #
-b110010000000010000000100011 %
-b100 +
-b1100 -
-b1100 7
-b110000000000001000010011 &
+b100000000000000100010011 '
+b1 -
+b100 /
+b100 9
+b10000000000000010010011 (
 1!
 #45
 0!
 #50
-b1100 :
-b10 4
-b1100000 9
-b1100000 6
-b0 *
-b100001000000100110011 $
-1A
-b110000000000001000010011 '
-bx <
-bx ?
-b1100 ;
-b1100 >
-b0 +
-b100 -
-b1100000 7
-b110010000000010000000100011 &
-b110000000000010000010000011 %
+b1000 ;
+b110100000000001000010011 $
+b110100000000001000010011 &
+b1000 8
+b1100 ,
+1C
+b10000000000000010010011 )
+bx >
+bx A
+b100 =
+b100 @
+b10 -
+b1000 /
+b1000 9
+b100000000000000100010011 (
+b110000000000000110010011 '
 b1100 #
 1!
 #55
 0!
 #60
-12
-1/
-10
-b0 4
-b1100 @
-b100010000000110010011 $
-b1 )
-b1 *
-b0 :
-b10000 #
-b100001000000100110011 %
-b1 +
-b0 -
-b110000000000010000010000011 &
-b1 .
-b110010000000010000000100011 '
-b1100 <
-b1100 ?
-b1100000 ;
-b1100000 >
-1=
+b1010000000000001010010011 $
+b1010000000000001010010011 &
+b1100 ;
 b100 B
-b110000000000001000010011 (
+b1101 ,
+b1100 8
+b10000 #
+b110100000000001000010011 '
+b11 -
+b1100 /
+b1100 9
+b110000000000000110010011 (
+b100000000000000100010011 )
+b1000 =
+b1000 @
+b1 D
+b10000000000000010010011 *
 1!
 #65
 0!
 #70
-b0 9
-02
-b1100000 @
-0/
-00
-b0 6
-b1100 G
-b0 B
-b110010000000010000000100011 (
-0A
-b110000000000010000010000011 '
-b0 <
-b0 ?
-0=
-b0 +
-b0 7
-b10011 &
-b0 .
+b1101 ;
+b1000001000001100110011 $
+b1000001000001100110011 &
+b1000 B
+b1101 8
+b10100 ,
+b100 F
+b10 D
+b100000000000000100010011 *
+b110000000000000110010011 )
+b1100 =
+b1100 @
+b100 -
+b1101 /
+b1101 9
+b110100000000001000010011 (
+b1010000000000001010010011 '
+b10100 #
 1!
 #75
 0!
 #80
-b1 3
-b1 4
-b1100 6
-b11000 9
-b1100 @
-b1100 :
-b1100 5
-b110001100000010001000100011 $
-b10 )
-b10100 #
-b100010000000110010011 %
-b10 +
-b1 -
-b1 ,
-bx 7
-b100001000000100110011 &
-b10011 '
-b0 ;
-b0 >
-b1 B
-b1100 C
-b110000000000010000010000011 (
-1A
+b1000000010000101000001110110011 $
+b1000000010000101000001110110011 &
+b10100 ;
+b1100 B
+b1 +
+b10 ,
+b10100 8
+b1000 G
+b11000 #
+b1000001000001100110011 '
+b101 -
+b10100 /
+b10100 9
+b1010000000000001010010011 (
+b110100000000001000010011 )
+b1101 =
+b1101 @
+b11 D
+b110000000000000110010011 *
 1!
 #85
 0!
 #90
-b1100 :
-b11000 5
-b0 4
-b10 3
-b11001 9
-b0 @
-b1 6
-b0 )
-b11 *
-b1100011 $
-b1100 D
-b0 B
-bx C
-b10011 (
-0A
-b100001000000100110011 '
-b1100 <
-b1100 ?
-b11000 ;
-b11000 >
-b11 +
-b10 ,
-b1 7
-b100010000000110010011 &
-b110001100000010001000100011 %
-b11000 #
+b1100 ;
+b1000001110010000110011 $
+b1000001110010000110011 &
+b1101 B
+b1000 <
+b100 7
+b1000 8
+b101 +
+b100 ,
+b1100 H
+b100 D
+b110100000000001000010011 *
+b1010000000000001010010011 )
+b10100 =
+b10100 @
+b110 -
+b10 /
+b1 .
+bx 9
+b1000001000001100110011 (
+b1000000010000101000001110110011 '
+b11100 #
 1!
 #95
 0!
 #100
-b10 4
-b0 3
-b11001 :
-b1100100 9
-b11000 @
-bx $
-b0 *
-b1100100 6
-b0 5
-b11100 #
-b1100011 %
-b100 +
-b11 -
-b0 ,
-b1100100 7
-b110001100000010001000100011 &
-b100010000000110010011 '
-b11001 ;
-b11001 >
-b10 B
-b100001000000100110011 (
-1A
+b1 5
+b10100011111010010110011 $
+b10100011111010010110011 &
+b1101 8
+b111 ;
+b1101 <
+b10100 7
+b10100 B
+b1 +
+b10 ,
+b1101 I
+b100000 #
+b1000001110010000110011 '
+b111 -
+b100 /
+b101 .
+b1000000010000101000001110110011 (
+b1 :
+b1000001000001100110011 )
+b1000 >
+b1000 A
+b1100 =
+b1100 @
+b101 D
+b1010000000000001010010011 *
 1!
 #105
 0!
 #110
-12
-11
-b0 9
-b11001 @
-b0 4
-b0 :
-b0 6
-bx )
-bx *
-b11000 E
-b11 B
-b100010000000110010011 (
-b110001100000010001000100011 '
-b11001 <
-b11001 ?
-b1100100 ;
-b1100100 >
-1=
-b0 +
-b0 -
-b0 7
-b1100011 &
-b1 8
-bx %
-b100000 #
+b100 7
+b0 5
+b1000 8
+b1000001010010100110011 $
+b1000001010010100110011 &
+b1100 B
+b1000 <
+b1100 ;
+b11 +
+b101 ,
+b10100 J
+b110 D
+b1000001000001100110011 *
+b1000000010000101000001110110011 )
+b1101 >
+b1101 A
+b111 =
+b111 @
+b1000 -
+b10 /
+b1 .
+b1000001110010000110011 (
+b11 :
+b10100011111010010110011 '
+b100100 #
 1!
 #115
 0!
 #120
-02
-01
-b1100100 @
-b1100011 $
-b0 )
-b0 *
-b11001 F
-b11000 #
-b10011 %
-b10011 &
-b0 8
-b1100011 '
-b0 <
-b0 ?
-b0 ;
-b0 >
-0=
-b100 B
-b110001100000010001000100011 (
-0A
+b1100100000000010110010011 $
+b1100100000000010110010011 &
+b10100 8
+b10100 <
+b1100 7
+b111 B
+b1 +
+b10 ,
+b100 ;
+b1100 K
+b101000 #
+b1000001010010100110011 '
+b1001 -
+b101 /
+b11 .
+b10100011111010010110011 (
+b10 :
+b1000001110010000110011 )
+b1000 >
+b1000 A
+b1100 =
+b1100 @
+b111 D
+b1000000010000101000001110110011 *
 1!
 #125
 0!
 #130
-b0 @
-bx $
-b0 B
-b1100011 (
-b10011 '
-b1100011 %
-b11100 #
+b1000 8
+b110101100000010001000100011 $
+b110101100000010001000100011 &
+b1100 B
+b1000 <
+b100 7
+b1 ;
+b0 +
+b11001 ,
+b111 L
+b1000 D
+b1000001110010000110011 *
+b10100011111010010110011 )
+b10100 >
+b10100 A
+b100 =
+b100 @
+b1010 -
+b10 /
+b1 .
+b1000001010010100110011 (
+b101 :
+b1100100000000010110010011 '
+b101100 #
 1!
 #135
+0!
+#140
+b1100011 $
+b1100011 &
+bx <
+b0 7
+b100 B
+b1011 ,
+b11001 ;
+b11001 8
+b1100 M
+b110000 #
+b110101100000010001000100011 '
+b1011 -
+b11001 /
+b0 .
+b11001 9
+b1100100000000010110010011 (
+b0 :
+b1000001010010100110011 )
+b1000 >
+b1000 A
+b1 =
+b1 @
+b1001 D
+b10100011111010010110011 *
+1!
+#145
+0!
+#150
+b11001 <
+b10 6
+b1100100 ;
+bx $
+bx &
+b1 B
+x%
+b1100100 8
+b0 ,
+b100 N
+b1010 D
+b1000001010010100110011 *
+b1100100000000010110010011 )
+bx >
+bx A
+b11001 =
+b11001 @
+b100 -
+b1011 /
+b1100100 9
+b110101100000010001000100011 (
+b1100011 '
+b110100 #
+1!
+#155
+0!
+#160
+14
+13
+b0 8
+b0 ;
+b0 6
+b11001 B
+bx +
+bx ,
+b0 <
+b1 O
+bx #
+bx '
+b0 -
+b0 /
+b0 9
+b1100011 (
+b1 :
+b110101100000010001000100011 )
+b11001 >
+b11001 A
+b1100100 =
+b1100100 @
+1?
+b1011 D
+b1100100000000010110010011 *
+1!
+#165
+0!
+#170
+04
+b1100011 $
+b1100011 &
+b1100100 B
+03
+0%
+b0 +
+b0 ,
+b11001 P
+b100 D
+b110101100000010001000100011 *
+0C
+b1100011 )
+b0 >
+b0 A
+b0 =
+b0 @
+0?
+b10011 (
+b0 :
+b10011 '
+b110000 #
+1!
+#175
+0!
+#180
+bx $
+bx &
+x%
+b0 B
+b110100 #
+b1100011 '
+b10011 )
+b0 D
+b1100011 *
+1!
+#185
 0!

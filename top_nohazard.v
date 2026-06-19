@@ -1,18 +1,15 @@
-module top(input  clk, reset, 
+module top_nohazard(input  clk, reset, 
            output [31:0] WriteData, DataAdr, 
            output MemWrite);
   
-  wire [31:0] PC, Instr, RawInstr, ReadData;
-  wire        IsCompressed; 
+  wire [31:0] PC, Instr, ReadData; 
   
   // instantiate processor and memories
-  riscvpipeline rvcore(
+  riscvpipeline_nohazard rvcore(
     .clk(clk), 
     .reset(reset), 
     .PCF(PC), 
-    .RawInstrF(RawInstr),
     .InstrF(Instr), 
-    .IsCompressedF(IsCompressed),
     .MemWriteM(MemWrite), 
     .ALUResultM(DataAdr), 
     .WriteDataM(WriteData), 
@@ -21,9 +18,7 @@ module top(input  clk, reset,
 
   imem imem(
     .a(PC), 
-    .rd(Instr),
-    .rawrd(RawInstr),
-    .iscompressed(IsCompressed)
+    .rd(Instr)
   ); 
 
   dmem dmem(

@@ -1,0 +1,376 @@
+\chapter{Procesador RISC-V Pipelined}
+
+\section{Teoría: Datapath y Control}
+
+Un procesador \textit{pipelined} divide la ejecución de las instrucciones en cinco etapas: \textit{Instruction Fetch} (IF), \textit{Instruction Decode} (ID), \textit{Execute} (EX), \textit{Memory Access} (MEM) y \textit{Write Back} (WB). Esta organización permite que varias instrucciones se ejecuten de manera simultánea, incrementando el rendimiento del procesador.
+
+En la etapa IF se obtiene la instrucción desde la memoria de instrucciones usando el PC. En ID se decodifica la instrucción, se leen los registros fuente y se generan las señales de control. En EX se ejecuta la operación en la ALU o se calcula la dirección de salto o memoria. En MEM se realiza la lectura o escritura en la memoria de datos. Finalmente, en WB se escribe el resultado en el banco de registros.
+
+La unidad de control genera las señales necesarias para coordinar el funcionamiento del procesador. En una arquitectura pipeline, estas señales también deben avanzar por registros intermedios entre etapas, de modo que cada instrucción conserve sus señales de control mientras avanza por el procesador.
+
+\section{Implementación de Instrucciones}
+
+\subsection{Cuadro de instrucciones implementadas}
+
+En comparación con la versión \texttt{single-cycle} inicial, la versión actual amplía el conjunto de instrucciones soportadas, como se muestra en el Cuadro~\ref{tab:instrucciones}.
+
+\begin{table}[h]
+\centering
+\caption{Instrucciones implementadas: single-cycle vs. versión actual}
+\label{tab:instrucciones}
+\small
+\begin{tabular}{|l|p{4.5cm}|p{5.5cm}|}
+\hline
+\textbf{Tipo} & \textbf{Instrucciones en single-cycle} & \textbf{Instrucciones actuales} \\
+\hline
+Load/store  & \texttt{lw}, \texttt{sw} & \texttt{lw}, \texttt{sw} \\
+\hline
+R-type      & \texttt{add}, \texttt{sub}, \texttt{slt}, \texttt{or}, \texttt{and} & \texttt{add}, \texttt{sub}, \texttt{slt}, \texttt{or}, \texttt{and}, \texttt{sll}, \texttt{xor}, \texttt{srl}, \texttt{sra} \\
+\hline
+I-type ALU  & \texttt{addi}, \texttt{slti}, \texttt{ori}, \texttt{andi} & \texttt{addi}, \texttt{slti}, \texttt{ori}, \texttt{andi}, \texttt{slli}, \texttt{xori}, \texttt{srli}, \texttt{srai} \\
+\hline
+Branch      & \texttt{beq} & \texttt{beq}, \texttt{bne}, \texttt{blt}, \texttt{bge} \\
+\hline
+Jump        & \texttt{jal} & \texttt{jal}, \texttt{jalr} \\
+\hline
+U-type      & No implementado & \texttt{lui} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Descripción de cambios en el código}
+
+Se mantuvieron las instrucciones base \texttt{lw}, \texttt{sw}, \texttt{add}, \texttt{sub}, \texttt{slt}, \texttt{or}, \texttt{and}, \texttt{addi}, \texttt{slti}, \texttt{ori}, \texttt{andi}, \texttt{beq} y \texttt{jal}. Además, se agregaron instrucciones de desplazamiento y lógica como \texttt{sll}, \texttt{slli}, \texttt{xor}, \texttt{xori}, \texttt{srl}, \texttt{srli}, \texttt{sra} y \texttt{srai}. También se añadieron nuevos saltos y branches: \texttt{bne}, \texttt{blt}, \texttt{bge}, \texttt{jalr}, y la instrucción tipo U \texttt{lui}.
+
+En \texttt{maindec.v} se amplió la señal \texttt{ImmSrc} de 2 a 3 bits para representar más formatos de inmediato, incluyendo el tipo U usado por \texttt{lui}. También se agregaron los opcodes de \texttt{jalr} y \texttt{lui}.
+
+En \texttt{extend.v} se agregó la generación del inmediato tipo U mediante:
+
+\begin{verbatim}
+{instr[31:12], 12'b0}
+\end{verbatim}
+
+En \texttt{aludec.v} y \texttt{alu.v} se amplió \texttt{ALUControl} de 3 a 4 bits para soportar nuevas operaciones como \texttt{xor}, \texttt{sll}, \texttt{srl}, \texttt{sra} y el paso del inmediato para \texttt{lui}.
+
+En \texttt{riscvpipeline.v} se implementó la arquitectura pipeline y se agregó soporte para \texttt{jalr}, calculando el nuevo PC como:
+
+\begin{verbatim}
+(rs1 + imm) & 32'hfffffffe
+\end{verbatim}
+
+También se extendió la lógica de branches para soportar \texttt{beq}, \texttt{bne}, \texttt{blt} y \texttt{bge}. Finalmente, se agregó la lógica de hazards con \textit{forwarding}, \textit{stalling} y \textit{flushing}.
+
+\section{Programa ISA sin dependencias}
+
+El objetivo de esta prueba es verificar el correcto funcionamiento del procesador \textit{pipeline} ejecutando un programa base sin dependencias críticas entre instrucciones. El programa utilizado se encuentra en el archivo \texttt{isa\_no\_dependencies.mem}.
+
+\subsection{Programa utilizado}
+
+\begin{verbatim}
+00400093
+00800113
+00C00193
+00D00213
+01400293
+00208333
+404283B3
+0020E433
+0051F4B3
+0020A533
+01900593
+06B02223
+00000063
+\end{verbatim}
+
+La decodificación del programa es:
+
+\begin{verbatim}
+addi x1,  x0, 4
+addi x2,  x0, 8
+addi x3,  x0, 12
+addi x4,  x0, 13
+addi x5,  x0, 20
+add  x6,  x1, x2
+sub  x7,  x5, x4
+or   x8,  x1, x2
+and  x9,  x3, x5
+slt  x10, x1, x2
+addi x11, x0, 25
+sw   x11, 100(x0)
+beq  x0,  x0, 0
+\end{verbatim}
+
+\subsection{Resultados intermedios esperados}
+
+Las primeras instrucciones inicializan registros:
+
+\[
+x1 = 4,\quad x2 = 8,\quad x3 = 12,\quad x4 = 13,\quad x5 = 20
+\]
+
+Luego, las instrucciones tipo R producen:
+
+\[
+x6 = x1 + x2 = 12
+\]
+
+\[
+x7 = x5 - x4 = 7
+\]
+
+\[
+x8 = x1 \;|\; x2 = 12
+\]
+
+\[
+x9 = x3 \;\&\; x5 = 4
+\]
+
+\[
+x10 = (x1 < x2) = 1
+\]
+
+Finalmente, se almacena el valor 25 en la dirección 100:
+
+\[
+\text{Mem}[100] = 25
+\]
+
+\subsection{Verificación mediante waveform}
+
+Para esta prueba se debe colocar una captura de la waveform donde se observe que el programa termina escribiendo el valor esperado en memoria.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_isa_no_dependencies.png}
+\caption{Waveform del programa \texttt{isa\_no\_dependencies.mem}.}
+\label{fig:waveform_isa}
+\end{figure}
+
+Se recomienda mostrar las siguientes señales:
+
+\begin{verbatim}
+PCF
+InstrD
+InstrE
+InstrM
+InstrW
+ALUResultM
+WriteDataM
+MemWriteM
+ResultW
+RdW
+\end{verbatim}
+
+El resultado esperado es:
+
+\begin{verbatim}
+Simulation succeeded
+Final store: mem[100] <= 25
+\end{verbatim}
+
+\section{Teoría: Hazard Unit}
+
+En un procesador \textit{pipeline}, varias instrucciones se ejecutan al mismo tiempo en diferentes etapas. Debido a esto pueden aparecer \textit{hazards}, que son situaciones donde la ejecución normal del pipeline puede producir resultados incorrectos.
+
+Los hazards principales son los hazards de datos y los hazards de control. Un hazard de datos ocurre cuando una instrucción necesita usar un registro cuyo valor todavía no ha sido escrito por una instrucción anterior. Un hazard de control ocurre cuando una instrucción de salto o branch modifica el flujo del programa y las instrucciones que ya entraron al pipeline no corresponden al camino correcto.
+
+La \textit{Hazard Unit} detecta estos casos y genera señales de control para corregirlos. En esta implementación se usaron tres mecanismos principales:
+
+\begin{itemize}
+    \item \textit{Forwarding}: reenvía resultados desde MEM o WB hacia EX.
+    \item \textit{Stalling}: detiene temporalmente el pipeline cuando el dato aún no está disponible.
+    \item \textit{Flushing}: limpia instrucciones incorrectas después de un branch o jump tomado.
+\end{itemize}
+
+Las señales principales utilizadas son \texttt{ForwardAE}, \texttt{ForwardBE}, \texttt{StallF}, \texttt{StallD}, \texttt{FlushD} y \texttt{FlushE}.
+
+\section{Implementación: Hazard Unit}
+
+La \textit{Hazard Unit} fue incorporada en \texttt{riscvpipeline.v}. Esta unidad compara los registros fuente de las instrucciones en ID y EX con los registros destino de las instrucciones en EX, MEM y WB.
+
+Para dependencias de datos se implementó \textit{forwarding}. Si una instrucción en EX necesita un dato producido por una instrucción en MEM o WB, el valor se reenvía directamente a la entrada de la ALU mediante los multiplexores controlados por \texttt{ForwardAE} y \texttt{ForwardBE}.
+
+Para dependencias \texttt{load-use}, se implementó \textit{stalling}. En este caso se congelan el PC y el registro IF/ID usando \texttt{StallF} y \texttt{StallD}, y se inserta una burbuja usando \texttt{FlushE}.
+
+Para hazards de control, se implementó \textit{flushing}. Cuando un branch o jump cambia el PC, se limpian las instrucciones incorrectas mediante \texttt{FlushD} y \texttt{FlushE}.
+
+\subsection{Versión sin Hazard Unit}
+
+Para demostrar la necesidad de la unidad, se creó una versión temporal sin Hazard Unit:
+
+\begin{verbatim}
+riscvpipeline_nohazard.v
+top_nohazard.v
+testbench_nohazard.v
+run_nohazard.sh
+\end{verbatim}
+
+En esta versión se desactivaron las señales de forwarding, stall y flush:
+
+\begin{verbatim}
+assign ForwardAE = 2'b00;
+assign ForwardBE = 2'b00;
+assign StallD = 1'b0;
+assign StallF = 1'b0;
+assign FlushD = 1'b0;
+assign FlushE = 1'b0;
+\end{verbatim}
+
+\section{Programas de Prueba del Hazard Unit}
+
+\subsection{Programa 2: ISA test Forwarding}
+
+Este programa verifica dependencias de datos que pueden resolverse con \textit{forwarding}. Con Hazard Unit, el resultado producido en una etapa posterior se reenvía a la ALU. Sin Hazard Unit, el programa falla porque la instrucción dependiente usa un dato incorrecto o indefinido.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_forwarding.png}
+\caption{Waveform del programa \texttt{forwarding\_test.mem} con Hazard Unit.}
+\label{fig:waveform_forwarding}
+\end{figure}
+
+Se recomienda mostrar:
+
+\begin{verbatim}
+ForwardAE
+ForwardBE
+Rs1E
+Rs2E
+RdM
+RdW
+ALUResultM
+ResultW
+SrcAE
+SrcBE
+\end{verbatim}
+
+\subsection{Programa 3: ISA test Stalling}
+
+Este programa verifica una dependencia tipo \texttt{load-use}. En este caso, una instrucción utiliza inmediatamente el valor cargado por un \texttt{lw}. Como el dato no está disponible hasta después de MEM, se requiere insertar un stall.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_stalling.png}
+\caption{Waveform del programa \texttt{stalling\_test.mem} con Hazard Unit.}
+\label{fig:waveform_stalling}
+\end{figure}
+
+Se recomienda mostrar:
+
+\begin{verbatim}
+StallF
+StallD
+FlushE
+ResultSrcE
+Rs1D
+Rs2D
+RdE
+PCF
+InstrD
+InstrE
+\end{verbatim}
+
+\subsection{Programa 4: ISA test Flushing}
+
+Este programa verifica hazards de control producidos por branches o jumps. Cuando el salto es tomado, las instrucciones cargadas por el camino incorrecto deben limpiarse del pipeline.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_flushing.png}
+\caption{Waveform del programa \texttt{flushing\_test.mem} con Hazard Unit.}
+\label{fig:waveform_flushing}
+\end{figure}
+
+Se recomienda mostrar:
+
+\begin{verbatim}
+PCSrcE
+FlushD
+FlushE
+PCF
+InstrD
+InstrE
+PCTargetE
+PCJumpTargetE
+MemWriteM
+WriteDataM
+\end{verbatim}
+
+\section{Comparación con y sin Hazard Unit}
+
+Para comprobar la necesidad de la Hazard Unit se ejecutaron los programas 2, 3 y 4 con dos versiones del procesador: una versión con Hazard Unit y una versión sin Hazard Unit.
+
+Los comandos usados para la versión con Hazard Unit fueron:
+
+\begin{verbatim}
+./run_sim.sh mem/forwarding_test.mem
+./run_sim.sh mem/stalling_test.mem
+./run_sim.sh mem/flushing_test.mem
+\end{verbatim}
+
+Los comandos usados para la versión sin Hazard Unit fueron:
+
+\begin{verbatim}
+./run_nohazard.sh mem/forwarding_test.mem
+./run_nohazard.sh mem/stalling_test.mem
+./run_nohazard.sh mem/flushing_test.mem
+\end{verbatim}
+
+\begin{table}[h]
+\centering
+\caption{Resultados con y sin Hazard Unit}
+\label{tab:hazard_tests}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Programa} & \textbf{Con Hazard Unit} & \textbf{Sin Hazard Unit} \\
+\hline
+\texttt{forwarding\_test.mem} & Funciona correctamente & Falla, \texttt{mem[100] = x} \\
+\hline
+\texttt{stalling\_test.mem} & Funciona correctamente & Falla, \texttt{mem[100] = x} \\
+\hline
+\texttt{flushing\_test.mem} & Funciona correctamente & Falla, \texttt{mem[100] = x} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Waveforms sin Hazard Unit}
+
+Las siguientes capturas deben mostrar que, al desactivar la Hazard Unit, los programas no llegan al resultado esperado.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_nohazard_forwarding.png}
+\caption{Waveform sin Hazard Unit para \texttt{forwarding\_test.mem}.}
+\label{fig:nohazard_forwarding}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_nohazard_stalling.png}
+\caption{Waveform sin Hazard Unit para \texttt{stalling\_test.mem}.}
+\label{fig:nohazard_stalling}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/waveform_nohazard_flushing.png}
+\caption{Waveform sin Hazard Unit para \texttt{flushing\_test.mem}.}
+\label{fig:nohazard_flushing}
+\end{figure}
+
+En las pruebas sin Hazard Unit se observaron valores indefinidos y el programa no logró escribir correctamente el valor esperado en memoria:
+
+\begin{verbatim}
+Simulation ended: timeout/status dump
+mem[100] = x
+\end{verbatim}
+
+Por el contrario, con Hazard Unit los programas finalizaron correctamente:
+
+\begin{verbatim}
+Simulation succeeded
+Final store: mem[100] <= 25
+\end{verbatim}
+
+Estos resultados demuestran que la Hazard Unit es necesaria para ejecutar correctamente programas con dependencias de datos y hazards de control en un procesador RISC-V pipeline.

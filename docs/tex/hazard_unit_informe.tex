@@ -1,0 +1,106 @@
+\section{Teoría: Hazard unit}
+
+En un procesador \textit{pipeline}, varias instrucciones se ejecutan al mismo tiempo en diferentes etapas. Debido a esto pueden aparecer \textit{hazards}, que son situaciones donde la ejecución normal del pipeline puede producir resultados incorrectos.
+
+Los hazards principales son los hazards de datos y los hazards de control. Un hazard de datos ocurre cuando una instrucción necesita usar un registro cuyo valor todavía no ha sido escrito por una instrucción anterior. Un hazard de control ocurre cuando una instrucción de salto o branch modifica el flujo del programa y las instrucciones que ya entraron al pipeline no corresponden al camino correcto.
+
+La \textit{Hazard Unit} se encarga de detectar estos casos y generar señales de control para corregirlos. En esta implementación se usaron tres mecanismos:
+
+\begin{itemize}
+    \item \textit{Forwarding}: reenvía resultados desde las etapas MEM o WB hacia la etapa EX, evitando esperar a que el dato sea escrito en el banco de registros.
+    \item \textit{Stalling}: detiene temporalmente el avance del pipeline cuando el dato aún no está disponible, como en una dependencia \texttt{lw-use}.
+    \item \textit{Flushing}: limpia instrucciones incorrectas que fueron cargadas después de un branch o jump tomado.
+\end{itemize}
+
+Las señales principales utilizadas por la unidad son \texttt{ForwardAE}, \texttt{ForwardBE}, \texttt{StallF}, \texttt{StallD}, \texttt{FlushD} y \texttt{FlushE}. Con estas señales se controla el reenvío de datos hacia la ALU, la congelación del PC y del registro IF/ID, y la inserción de burbujas cuando es necesario.
+
+\section{Implementación: Hazard unit}
+
+\subsection{Descripción de cambios en el código}
+
+La \textit{Hazard Unit} fue incorporada en el archivo \texttt{riscvpipeline.v}. Esta unidad compara los registros fuente de las instrucciones en las etapas ID y EX con los registros destino de las instrucciones que se encuentran en las etapas EX, MEM y WB.
+
+Para resolver dependencias de datos se implementó \textit{forwarding}. Si una instrucción en EX necesita un operando que será escrito por una instrucción ubicada en MEM o WB, la unidad selecciona ese resultado mediante los multiplexores controlados por \texttt{ForwardAE} y \texttt{ForwardBE}.
+
+Para el caso \texttt{load-use}, el forwarding no es suficiente porque el dato cargado por \texttt{lw} recién está disponible después de la etapa MEM. Por ello se implementó \textit{stalling}. Cuando se detecta que una instrucción depende inmediatamente de un \texttt{lw}, se activan \texttt{StallF} y \texttt{StallD} para congelar el PC y el registro IF/ID, y se activa \texttt{FlushE} para insertar una burbuja en la etapa EX.
+
+Para los hazards de control se implementó \textit{flushing}. Cuando un branch o jump cambia el PC, se activan \texttt{FlushD} y \texttt{FlushE} para eliminar las instrucciones que ingresaron al pipeline por el camino incorrecto.
+
+Además, para demostrar la necesidad de esta unidad, se creó una versión temporal sin Hazard Unit:
+
+\begin{verbatim}
+riscvpipeline_nohazard.v
+top_nohazard.v
+testbench_nohazard.v
+run_nohazard.sh
+\end{verbatim}
+
+En esta versión se desactivaron las señales de forwarding, stall y flush:
+
+\begin{verbatim}
+assign ForwardAE = 2'b00;
+assign ForwardBE = 2'b00;
+assign StallD = 1'b0;
+assign StallF = 1'b0;
+assign FlushD = 1'b0;
+assign FlushE = 1'b0;
+\end{verbatim}
+
+\subsection{Pruebas con y sin Hazard Unit}
+
+Para verificar el funcionamiento de la Hazard Unit se ejecutaron los programas de prueba con dos versiones del procesador: una versión con Hazard Unit y una versión sin Hazard Unit.
+
+Los comandos usados para la versión con Hazard Unit fueron:
+
+\begin{verbatim}
+./run_sim.sh mem/forwarding_test.mem
+./run_sim.sh mem/stalling_test.mem
+./run_sim.sh mem/flushing_test.mem
+\end{verbatim}
+
+Los comandos usados para la versión sin Hazard Unit fueron:
+
+\begin{verbatim}
+./run_nohazard.sh mem/forwarding_test.mem
+./run_nohazard.sh mem/stalling_test.mem
+./run_nohazard.sh mem/flushing_test.mem
+\end{verbatim}
+
+\begin{table}[h]
+\centering
+\caption{Resultados de los programas de prueba con y sin Hazard Unit}
+\label{tab:hazard_tests}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Programa} & \textbf{Con Hazard Unit} & \textbf{Sin Hazard Unit} \\
+\hline
+\texttt{forwarding\_test.mem} & Funciona correctamente & Falla, \texttt{mem[100] = x} \\
+\hline
+\texttt{stalling\_test.mem} & Funciona correctamente & Falla, \texttt{mem[100] = x} \\
+\hline
+\texttt{flushing\_test.mem} & Funciona correctamente & Falla, \texttt{mem[100] = x} \\
+\hline
+\end{tabular}
+\end{table}
+
+En el programa \texttt{forwarding\_test.mem}, la versión sin Hazard Unit falla porque una instrucción utiliza un resultado que todavía no ha sido escrito en el banco de registros. Al no existir forwarding, el operando usado por la ALU es incorrecto o indefinido.
+
+En el programa \texttt{stalling\_test.mem}, la versión sin Hazard Unit falla porque se presenta una dependencia \texttt{load-use}. La instrucción siguiente intenta usar el dato cargado por \texttt{lw} antes de que este se encuentre disponible. Al no existir stall, el pipeline avanza incorrectamente.
+
+En el programa \texttt{flushing\_test.mem}, la versión sin Hazard Unit falla porque las instrucciones posteriores a un branch o jump tomado no son limpiadas del pipeline. Por ello se ejecutan instrucciones que no corresponden al flujo correcto del programa.
+
+La versión con Hazard Unit ejecutó correctamente los tres programas y produjo el resultado esperado:
+
+\begin{verbatim}
+Simulation succeeded
+Final store: mem[100] <= 25
+\end{verbatim}
+
+Por otro lado, la versión sin Hazard Unit terminó con valores indefinidos o no llegó al resultado esperado:
+
+\begin{verbatim}
+Simulation ended: timeout/status dump
+mem[100] = x
+\end{verbatim}
+
+Estos resultados demuestran que la Hazard Unit es necesaria para que el procesador pipeline ejecute correctamente programas con dependencias de datos y hazards de control.
