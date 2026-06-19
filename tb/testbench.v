@@ -101,6 +101,8 @@ module testbench;
       $display("x4  = %0d", $signed(dut.rvcore.rf.rf[4]));
       $display("x5  = %0d", $signed(dut.rvcore.rf.rf[5]));
       $display("x7  = %0d", $signed(dut.rvcore.rf.rf[7]));
+            $display("x8  = %0d", $signed(dut.rvcore.rf.rf[8]));
+
       $display("x9  = %0d", $signed(dut.rvcore.rf.rf[9]));
       $display("Memory:");
       $display("mem[96]  = %0d", dut.dmem.RAM[24]);

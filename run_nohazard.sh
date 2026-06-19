@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SIM_OUT="riscv_nohazard_sim"
+BUILD_DIR="build"
+SIM_OUT="$BUILD_DIR/riscv_nohazard_sim"
+VCD_OUT="$BUILD_DIR/riscv_nohazard.vcd"
 MEMFILE="${1:-mem/forwarding_test.mem}"
 
 if [ ! -f "$MEMFILE" ]; then
@@ -9,13 +11,22 @@ if [ ! -f "$MEMFILE" ]; then
   exit 1
 fi
 
+mkdir -p "$BUILD_DIR"
+
 echo "Compiling pipeline without Hazard Unit..."
 iverilog -g2012 -o "$SIM_OUT" \
-  testbench_nohazard.v top_nohazard.v riscvpipeline_nohazard.v \
-  controller.v maindec.v aludec.v regfile.v alu.v extend.v \
-  mux2.v mux3.v flopr.v adder.v imem.v dmem.v
+  tb/testbench_nohazard.v \
+  src/core/top_nohazard.v src/core/riscvpipeline_nohazard.v \
+  src/core/controller.v src/core/maindec.v src/core/aludec.v \
+  src/core/extend.v src/core/compressed_decoder.v \
+  src/components/regfile.v src/components/alu.v src/components/mux2.v \
+  src/components/mux3.v src/components/flopr.v src/components/adder.v \
+  src/mem/imem.v src/mem/dmem.v
 
 echo "Running no-hazard simulation with MEMFILE=$MEMFILE"
-vvp "$SIM_OUT" "+MEMFILE=$MEMFILE"
+(
+  cd "$BUILD_DIR"
+  vvp "./riscv_nohazard_sim" "+MEMFILE=../$MEMFILE"
+)
 
-echo "VCD generated: riscv_nohazard.vcd"
+echo "VCD generated: $VCD_OUT"

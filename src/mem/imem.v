@@ -9,6 +9,8 @@ module imem(input  [31:0] a,
   reg [15:0] RAM[0:127]; 
   reg [1023:0] memfile;
   wire [15:0] halfword0, halfword1;
+  wire [31:0] expanded;
+  wire        compressed_illegal;
 
   initial begin
       if (!$value$plusargs("MEMFILE=%s", memfile))
@@ -24,8 +26,14 @@ module imem(input  [31:0] a,
   // rawrd shows the instruction bits before expansion/normalization.
   assign rawrd = iscompressed ? {16'b0, halfword0} : {halfword1, halfword0};
 
+  compressed_decoder cdec(
+    .instr16(halfword0),
+    .instr32(expanded),
+    .illegal(compressed_illegal)
+  );
+
   // 32-bit instructions have low bits 2'b11 and are assembled from two
-  // consecutive halfwords. Compressed instructions are detected, but not
-  // expanded yet; until that decoder is added, treat them as NOPs.
-  assign rd = iscompressed ? 32'h00000013 : {halfword1, halfword0};
+  // consecutive halfwords. Compressed instructions are expanded to their
+  // 32-bit equivalents when supported; unsupported ones become NOPs.
+  assign rd = iscompressed ? expanded : {halfword1, halfword0};
 endmodule

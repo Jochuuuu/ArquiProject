@@ -1,0 +1,18 @@
+// compressed_add_addi_test.mem
+// Prueba inicial de Entrega 2 Parte 1 con c.addi y c.add.
+// Cada linea es un halfword de 16 bits.
+
+0093  // low  de 00000093  ; addi x1, x0, 0
+0000  // high de 00000093
+0113  // low  de 00000113  ; addi x2, x0, 0
+0000  // high de 00000113
+
+00A9  // c.addi x1, 10      ; expande a addi x1, x1, 10
+013D  // c.addi x2, 15      ; expande a addi x2, x2, 15
+908A  // c.add  x1, x2      ; expande a add x1, x1, x2 = 25
+
+2223  // low  de 06102223  ; sw x1, 100(x0)
+0610  // high de 06102223
+
+0063  // low  de 00000063  ; beq x0, x0, +0
+0000  // high de 00000063

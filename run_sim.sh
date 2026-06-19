@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SIM_OUT="riscv_pipe_sim"
-VCD_OUT="riscv_pipe.vcd"
+BUILD_DIR="build"
+SIM_OUT="$BUILD_DIR/riscv_pipe_sim"
+VCD_OUT="$BUILD_DIR/riscv_pipe.vcd"
 MEMFILE=""
 OPEN_VCD="0"
 
@@ -25,13 +26,20 @@ if [ ! -f "$MEMFILE" ]; then
   exit 1
 fi
 
+mkdir -p "$BUILD_DIR"
+
 echo "Compiling pipeline..."
 iverilog -g2012 -o "$SIM_OUT" \
-  testbench.v top.v riscvpipeline.v controller.v maindec.v aludec.v \
-  regfile.v alu.v extend.v mux2.v mux3.v flopr.v adder.v imem.v dmem.v
+  tb/testbench.v \
+  src/core/top.v src/core/riscvpipeline.v src/core/controller.v \
+  src/core/maindec.v src/core/aludec.v src/core/extend.v \
+  src/core/compressed_decoder.v \
+  src/components/regfile.v src/components/alu.v src/components/mux2.v \
+  src/components/mux3.v src/components/flopr.v src/components/adder.v \
+  src/mem/imem.v src/mem/dmem.v
 
 echo "Running simulation with MEMFILE=$MEMFILE"
-vvp "$SIM_OUT" "+MEMFILE=$MEMFILE"
+(cd "$BUILD_DIR" && vvp "./riscv_pipe_sim" "+MEMFILE=../$MEMFILE")
 
 echo "VCD generated: $VCD_OUT"
 
