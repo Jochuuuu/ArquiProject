@@ -69,6 +69,7 @@ Estas instrucciones comprimidas ALU se pueden expandir a instrucciones de 32 bit
 | `c.add rd, rs2` | Implementada | `funct3=100`, `quadrant=10`, `bit12=1`, `rd != x0`, `rs2 != x0` | `add rd, rd, rs2` |
 | `c.srli rd', shamt` | Implementada | `funct3=100`, `quadrant=01`, `bits[11:10]=00` | `srli rd', rd', shamt` |
 | `c.srai rd', shamt` | Implementada | `funct3=100`, `quadrant=01`, `bits[11:10]=01` | `srai rd', rd', shamt` |
+| `c.andi rd', imm` | Implementada extra | `funct3=100`, `quadrant=01`, `bits[11:10]=10` | `andi rd', rd', imm` |
 | `c.sub rd', rs2'` | Implementada | `quadrant=01`, `funct6=100011`, `funct2=00` | `sub rd', rd', rs2'` |
 | `c.xor rd', rs2'` | Implementada | `quadrant=01`, `funct6=100011`, `funct2=01` | `xor rd', rd', rs2'` |
 | `c.or rd', rs2'` | Implementada | `quadrant=01`, `funct6=100011`, `funct2=10` | `or rd', rd', rs2'` |
@@ -85,6 +86,7 @@ El bit `instr16[12]` es importante y cambia de significado segun el formato:
 | `c.addi` | bit de signo del inmediato |
 | `c.slli` | bit alto del `shamt`; en RV32 normalmente debe ser 0 |
 | `c.lui` | bit de signo/parte alta del inmediato |
+| `c.andi` | bit de signo del inmediato |
 | `c.add` | debe ser 1 para distinguirlo de `c.mv`, `c.jr` y `c.jalr` |
 | `c.sub`, `c.xor`, `c.or`, `c.and` | forma parte de `funct6=instr16[15:10]` |
 
@@ -214,6 +216,42 @@ Comando:
 
 ```bash
 ./run_sim.sh mem/compressed_part1_test.mem
+```
+
+Resultado esperado:
+
+```text
+Simulation succeeded
+Final store: mem[100] <= 25
+```
+
+## 10. Tabla para Entrega 2 Parte 2
+
+Estas instrucciones comprimidas de memoria y salto tambien se expanden a instrucciones de 32 bits ya soportadas por el pipeline.
+
+| Instruccion comprimida | Estado | Equivalente de 32 bits |
+|---|---|---|
+| `c.lw rd', offset(rs1')` | Implementada | `lw rd', offset(rs1')` |
+| `c.sw rs2', offset(rs1')` | Implementada | `sw rs2', offset(rs1')` |
+| `c.lwsp rd, offset(x2)` | Implementada | `lw rd, offset(x2)` |
+| `c.swsp rs2, offset(x2)` | Implementada | `sw rs2, offset(x2)` |
+| `c.beqz rs1', offset` | Implementada | `beq rs1', x0, offset` |
+| `c.bnez rs1', offset` | Implementada | `bne rs1', x0, offset` |
+| `c.j offset` | Implementada | `jal x0, offset` |
+| `c.jal offset` | Implementada | `jal x1, offset` |
+| `c.jr rs1` | Implementada | `jalr x0, 0(rs1)` |
+| `c.jalr rs1` | Implementada | `jalr x1, 0(rs1)` |
+
+Archivo de prueba:
+
+```text
+mem/compressed_part2_test.mem
+```
+
+Comando:
+
+```bash
+./run_sim.sh mem/compressed_part2_test.mem
 ```
 
 Resultado esperado:

@@ -111,7 +111,7 @@ module testbench;
   endtask
 
   initial begin
-    #1000;
+    #5000;
     if (!done) begin
       $display("Simulation ended: timeout/status dump");
       print_state();

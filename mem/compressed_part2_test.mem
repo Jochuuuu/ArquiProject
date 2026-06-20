@@ -1,0 +1,42 @@
+// compressed_part2_test.mem
+// Prueba de Entrega 2 Parte 2:
+// c.lw, c.sw, c.lwsp, c.swsp, c.beqz, c.bnez, c.j, c.jal, c.jr, c.jalr.
+// Cada linea es un halfword de 16 bits.
+
+0113  // low  de 00000113 ; addi x2, x0, 0
+0000  // high de 00000113
+0413  // low  de 06000413 ; addi x8, x0, 96
+0600  // high de 06000413
+0493  // low  de 01900493 ; addi x9, x0, 25
+0190  // high de 01900493
+
+C004  // c.sw   x9, 0(x8)      ; mem[96] = 25
+4008  // c.lw   x10, 0(x8)     ; x10 = 25
+D4AA  // c.swsp x10, 104(x2)   ; mem[104] = 25
+55A6  // c.lwsp x11, 104(x2)   ; x11 = 25
+
+0613  // low  de 00000613 ; addi x12, x0, 0
+0000  // high de 00000613
+
+C211  // c.beqz x12, +4        ; salta porque x12 == 0
+008D  // c.addi x1, 3          ; debe saltarse
+E111  // c.bnez x10, +4        ; salta porque x10 == 25
+008D  // c.addi x1, 3          ; debe saltarse
+A011  // c.j +4                ; salto incondicional
+008D  // c.addi x1, 3          ; debe saltarse
+2011  // c.jal +4              ; x1 = PC + 2, luego salta
+008D  // c.addi x1, 3          ; debe saltarse
+
+0313  // low  de 03000313 ; addi x6, x0, 48
+0300  // high de 03000313
+8302  // c.jr x6               ; salta a PC=48
+008D  // c.addi x1, 3          ; debe saltarse
+
+0393  // low  de 03600393 ; addi x7, x0, 54
+0360  // high de 03600393
+9382  // c.jalr x7             ; x1 = PC + 2, salta a PC=54
+
+2223  // low  de 06A02223 ; sw x10, 100(x0)
+06A0  // high de 06A02223
+0063  // low  de 00000063 ; beq x0, x0, +0
+0000  // high de 00000063
