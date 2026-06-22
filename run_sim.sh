@@ -29,7 +29,7 @@ fi
 mkdir -p "$BUILD_DIR"
 
 echo "Compiling pipeline..."
-iverilog -g2012 -o "$SIM_OUT" \
+iverilog -g2005 -o "$SIM_OUT" \
   tb/testbench.v \
   src/core/top.v src/core/riscvpipeline.v src/core/controller.v \
   src/core/maindec.v src/core/aludec.v src/core/extend.v \

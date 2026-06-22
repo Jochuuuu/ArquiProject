@@ -1,0 +1,5 @@
+build/
+backend/
+frontend/
+*.vcd
+*_sim

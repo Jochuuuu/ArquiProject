@@ -5,6 +5,8 @@ module testbench;
   wire [31:0]  DataAdr;
   wire         MemWrite;
   reg          done;
+  integer      cycle;
+  integer      max_cycles;
 
   // instantiate device to be tested
   top dut(
@@ -17,77 +19,83 @@ module testbench;
 
   // Generate waveform file for GTKWave or other VCD viewers.
   initial begin
-    $dumpfile("riscv_pipe.vcd");
-    if ($test$plusargs("FULL_VCD")) begin
-      $dumpvars(0, testbench);
-    end else begin
-      // Compact VCD: pipeline, ALU, memory, and register values.
-      $dumpvars(0, clk);
-      $dumpvars(0, reset);
+    if (!$test$plusargs("NO_VCD")) begin
+      $dumpfile("riscv_pipe.vcd");
+      if ($test$plusargs("FULL_VCD")) begin
+        $dumpvars(0, testbench);
+      end else begin
+        // Compact VCD: pipeline, ALU, memory, and register values.
+        $dumpvars(0, clk);
+        $dumpvars(0, reset);
 
-      // Pipeline instruction flow.
-      $dumpvars(0, dut.rvcore.PCF);
-      $dumpvars(0, dut.rvcore.RawInstrF);
-      $dumpvars(0, dut.rvcore.IsCompressedF);
-      $dumpvars(0, dut.rvcore.InstrF);
-      $dumpvars(0, dut.rvcore.InstrD);
-      $dumpvars(0, dut.rvcore.InstrE);
-      $dumpvars(0, dut.rvcore.InstrM);
-      $dumpvars(0, dut.rvcore.InstrW);
+        // Pipeline instruction flow.
+        $dumpvars(0, dut.rvcore.PCF);
+        $dumpvars(0, dut.rvcore.RawInstrF);
+        $dumpvars(0, dut.rvcore.IsCompressedF);
+        $dumpvars(0, dut.rvcore.InstrF);
+        $dumpvars(0, dut.rvcore.InstrD);
+        $dumpvars(0, dut.rvcore.InstrE);
+        $dumpvars(0, dut.rvcore.InstrM);
+        $dumpvars(0, dut.rvcore.InstrW);
 
-      // Hazard unit: load-use stalls, flushes, and forwarding decisions.
-      $dumpvars(0, dut.rvcore.Rs1D);
-      $dumpvars(0, dut.rvcore.Rs2D);
-      $dumpvars(0, dut.rvcore.RdE);
-      $dumpvars(0, dut.rvcore.Rs1E);
-      $dumpvars(0, dut.rvcore.Rs2E);
-      $dumpvars(0, dut.rvcore.ResultSrcE);
-      $dumpvars(0, dut.rvcore.StallF);
-      $dumpvars(0, dut.rvcore.StallD);
-      $dumpvars(0, dut.rvcore.FlushD);
-      $dumpvars(0, dut.rvcore.FlushE);
-      $dumpvars(0, dut.rvcore.ForwardAE);
-      $dumpvars(0, dut.rvcore.ForwardBE);
+        // Hazard unit: load-use stalls, flushes, and forwarding decisions.
+        $dumpvars(0, dut.rvcore.Rs1D);
+        $dumpvars(0, dut.rvcore.Rs2D);
+        $dumpvars(0, dut.rvcore.RdE);
+        $dumpvars(0, dut.rvcore.Rs1E);
+        $dumpvars(0, dut.rvcore.Rs2E);
+        $dumpvars(0, dut.rvcore.ResultSrcE);
+        $dumpvars(0, dut.rvcore.StallF);
+        $dumpvars(0, dut.rvcore.StallD);
+        $dumpvars(0, dut.rvcore.FlushD);
+        $dumpvars(0, dut.rvcore.FlushE);
+        $dumpvars(0, dut.rvcore.ForwardAE);
+        $dumpvars(0, dut.rvcore.ForwardBE);
 
-      // Execute stage: values entering the ALU and the ALU result.
-      $dumpvars(0, dut.rvcore.SrcAE);
-      $dumpvars(0, dut.rvcore.SrcBE);
-      $dumpvars(0, dut.rvcore.ImmExtE);
-      $dumpvars(0, dut.rvcore.ALUControlE);
-      $dumpvars(0, dut.rvcore.ALUResultE);
-      $dumpvars(0, dut.rvcore.WriteDataE);
+        // Execute stage: values entering the ALU and the ALU result.
+        $dumpvars(0, dut.rvcore.SrcAE);
+        $dumpvars(0, dut.rvcore.SrcBE);
+        $dumpvars(0, dut.rvcore.ImmExtE);
+        $dumpvars(0, dut.rvcore.ALUControlE);
+        $dumpvars(0, dut.rvcore.ALUResultE);
+        $dumpvars(0, dut.rvcore.WriteDataE);
 
-      // Memory stage: address/data used by lw and sw.
-      $dumpvars(0, dut.rvcore.ALUResultM);
-      $dumpvars(0, dut.rvcore.WriteDataM);
-      $dumpvars(0, dut.rvcore.MemWriteM);
-      $dumpvars(0, DataAdr);
-      $dumpvars(0, WriteData);
-      $dumpvars(0, MemWrite);
+        // Memory stage: address/data used by lw and sw.
+        $dumpvars(0, dut.rvcore.ALUResultM);
+        $dumpvars(0, dut.rvcore.WriteDataM);
+        $dumpvars(0, dut.rvcore.MemWriteM);
+        $dumpvars(0, DataAdr);
+        $dumpvars(0, WriteData);
+        $dumpvars(0, MemWrite);
 
-      // Writeback stage: value written back to the register file.
-      $dumpvars(0, dut.rvcore.ResultW);
-      $dumpvars(0, dut.rvcore.RegWriteW);
-      $dumpvars(0, dut.rvcore.RdW);
-      $dumpvars(0, dut.rvcore.ReadDataW);
+        // Writeback stage: value written back to the register file.
+        $dumpvars(0, dut.rvcore.ResultW);
+        $dumpvars(0, dut.rvcore.RegWriteW);
+        $dumpvars(0, dut.rvcore.RdW);
+        $dumpvars(0, dut.rvcore.ReadDataW);
 
-      $dumpvars(0, dut.rvcore.rf.rf[1]);
-      $dumpvars(0, dut.rvcore.rf.rf[2]);
-      $dumpvars(0, dut.rvcore.rf.rf[3]);
-      $dumpvars(0, dut.rvcore.rf.rf[4]);
-      $dumpvars(0, dut.rvcore.rf.rf[5]);
-      $dumpvars(0, dut.rvcore.rf.rf[6]);
-      $dumpvars(0, dut.rvcore.rf.rf[7]);
-      $dumpvars(0, dut.rvcore.rf.rf[8]);
-      $dumpvars(0, dut.rvcore.rf.rf[9]);
-      $dumpvars(0, dut.rvcore.rf.rf[10]);
-      $dumpvars(0, dut.rvcore.rf.rf[11]);
+        $dumpvars(0, dut.rvcore.rf.rf[1]);
+        $dumpvars(0, dut.rvcore.rf.rf[2]);
+        $dumpvars(0, dut.rvcore.rf.rf[3]);
+        $dumpvars(0, dut.rvcore.rf.rf[4]);
+        $dumpvars(0, dut.rvcore.rf.rf[5]);
+        $dumpvars(0, dut.rvcore.rf.rf[6]);
+        $dumpvars(0, dut.rvcore.rf.rf[7]);
+        $dumpvars(0, dut.rvcore.rf.rf[8]);
+        $dumpvars(0, dut.rvcore.rf.rf[9]);
+        $dumpvars(0, dut.rvcore.rf.rf[10]);
+        $dumpvars(0, dut.rvcore.rf.rf[11]);
+      end
     end
   end
 
   // initialize test
   initial begin
     done = 0;
+    cycle = 0;
+    max_cycles = 500;
+    if (!$value$plusargs("MAX_CYCLES=%d", max_cycles))
+      max_cycles = 500;
     reset = 1; # 22;
     reset = 0;
   end
@@ -111,7 +119,8 @@ module testbench;
   endtask
 
   initial begin
-    #5000;
+    wait(reset == 0);
+    repeat(max_cycles + 10) @(negedge clk);
     if (!done) begin
       $display("Simulation ended: timeout/status dump");
       print_state();
@@ -127,6 +136,34 @@ module testbench;
 
   // check results
   always @(negedge clk) begin
+    if (!reset) begin
+      cycle = cycle + 1;
+      if ($test$plusargs("TRACE")) begin
+        $display("TRACE cycle=%0d pc=%h rawInstrF=%h instrF=%h instrD=%h instrE=%h instrM=%h instrW=%h stallF=%b stallD=%b flushD=%b flushE=%b forwardAE=%b forwardBE=%b rdW=%0d regWriteW=%b resultW=%h memWrite=%b dataAdr=%h writeData=%h",
+          cycle,
+          dut.rvcore.PCF,
+          dut.rvcore.RawInstrF,
+          dut.rvcore.InstrF,
+          dut.rvcore.InstrD,
+          dut.rvcore.InstrE,
+          dut.rvcore.InstrM,
+          dut.rvcore.InstrW,
+          dut.rvcore.StallF,
+          dut.rvcore.StallD,
+          dut.rvcore.FlushD,
+          dut.rvcore.FlushE,
+          dut.rvcore.ForwardAE,
+          dut.rvcore.ForwardBE,
+          dut.rvcore.RdW,
+          dut.rvcore.RegWriteW,
+          dut.rvcore.ResultW,
+          MemWrite,
+          DataAdr,
+          WriteData
+        );
+      end
+    end
+
     if(MemWrite) begin
       $display("Store: mem[%0d] <= %0d", DataAdr, $signed(WriteData));
       if(DataAdr === 100 & WriteData === 25) begin
