@@ -1,5 +1,30 @@
+# Verilog / simulacion
+
 build/
-backend/
-frontend/
 *.vcd
 *_sim
+
+# Dependencias Node
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Builds generados
+dist/
+backend/dist/
+frontend/dist/
+.next/
+frontend/.next/
+
+# Variables de entorno
+.env
+.env.local
+backend/.env
+frontend/.env
+
+# Corridas generadas
+backend/runs/
+
+# Logs
+*.log
+npm-debug.log*
