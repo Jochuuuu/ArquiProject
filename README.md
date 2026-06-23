@@ -1,29 +1,33 @@
 # Proyecto RISC-V Pipeline
 
-Este proyecto tiene un procesador RISC-V en Verilog, pruebas en memoria `.mem`,
-un backend para correr simulaciones y un frontend para usarlo desde una interfaz web.
+Este proyecto implementa un procesador RISC-V pipelined en Verilog. Lo principal
+de la entrega es correr las pruebas `.mem` con el simulador y verificar el
+resultado final. El backend y el frontend son solo una ayuda visual adicional.
 
 ## Que contiene
 
 - `src/`: codigo Verilog del procesador.
-- `mem/`: programas de prueba en formato `.mem`.
+- `src/core/`: pipeline, control y decoder de instrucciones comprimidas.
+- `src/mem/`: memoria de instrucciones y memoria de datos.
 - `tb/`: testbench de simulacion.
-- `backend/`: API que compila y corre simulaciones.
-- `frontend/`: interfaz web.
-- `docs/`: apuntes e informe.
+- `mem/`: programas de prueba en formato `.mem`.
+- `run_sim.sh`: script para compilar y correr una prueba.
+- `sim.conf`: archivo para elegir una prueba por defecto.
+- `backend/` y `frontend/`: interfaz opcional para visualizar mejor.
 
-## Requisitos
+## Requisito principal
 
-Para correr todo necesitas:
+Para la parte Verilog necesitas Icarus Verilog:
 
-- Node.js y npm.
-- Icarus Verilog (`iverilog` y `vvp`).
+```text
+iverilog
+vvp
+```
 
-No se sube `node_modules/`. En otra laptop se instala con `npm install`.
+## Como correr una prueba
 
-## Correr simulacion Verilog
-
-Desde la raiz del proyecto:
+Desde la raiz del proyecto, puedes correr una prueba pasando el archivo `.mem`
+directamente:
 
 ```bash
 ./run_sim.sh mem/compressed_part1_test.mem
@@ -35,14 +39,102 @@ Para la parte 2:
 ./run_sim.sh mem/compressed_part2_test.mem
 ```
 
-Si todo sale bien debe aparecer algo como:
+Si todo funciona, debe salir algo como:
 
 ```text
 Simulation succeeded
 Final store: mem[100] <= 25
 ```
 
-## Correr backend
+## Alternativa: usar sim.conf
+
+Tambien puedes cambiar el archivo que se corre desde `sim.conf`.
+
+Ejemplo:
+
+```bash
+MEMFILE=mem/compressed_part1_test.mem
+```
+
+Luego corres:
+
+```bash
+./run_sim.sh
+```
+
+Si quieres probar otra memoria, cambias `MEMFILE`:
+
+```bash
+MEMFILE=mem/compressed_part2_test.mem
+```
+
+## Como funcionan los archivos .mem
+
+Los `.mem` estan escritos por halfwords de 16 bits. Eso permite mezclar
+instrucciones normales de 32 bits con instrucciones comprimidas de 16 bits.
+
+Una instruccion normal de 32 bits ocupa dos lineas:
+
+```text
+0093  // low  de 00000093
+0000  // high de 00000093
+```
+
+La parte `low` va primero y la parte `high` va despues. El procesador las une
+asi:
+
+```verilog
+{halfword1, halfword0}
+```
+
+Una instruccion comprimida de 16 bits ocupa una sola linea:
+
+```text
+0095  // c.addi x1, 5
+```
+
+El procesador detecta si es de 16 o 32 bits revisando los bits bajos:
+
+```verilog
+assign iscompressed = (halfword0[1:0] != 2'b11);
+```
+
+Si es comprimida, se manda al `compressed_decoder.v` y se expande a una
+instruccion equivalente de 32 bits. Si no es comprimida, se usa como instruccion
+normal de 32 bits.
+
+## Pruebas importantes
+
+Parte 1, instrucciones logicas y aritmeticas comprimidas:
+
+```bash
+./run_sim.sh mem/compressed_part1_test.mem
+```
+
+Prueba:
+
+```text
+c.addi, c.add, c.sub, c.and, c.or, c.xor, c.slli, c.srli, c.srai, c.lui
+```
+
+Parte 2, memoria y control:
+
+```bash
+./run_sim.sh mem/compressed_part2_test.mem
+```
+
+Prueba:
+
+```text
+c.lw, c.sw, c.lwsp, c.swsp, c.beqz, c.bnez, c.j, c.jal, c.jr, c.jalr
+```
+
+## Backend y frontend opcional
+
+Esto no es lo principal de la entrega. Sirve para ver y correr simulaciones de
+forma mas comoda.
+
+Backend:
 
 ```bash
 cd backend
@@ -50,12 +142,7 @@ npm install
 npm run start:dev
 ```
 
-El backend genera carpetas dentro de `backend/runs/`. Eso es normal y no se sube
-al repo.
-
-## Correr frontend
-
-En otra terminal:
+Frontend:
 
 ```bash
 cd frontend
@@ -69,10 +156,14 @@ Luego abre:
 http://localhost:3000
 ```
 
-## Notas
+## Notas para Git
 
-- No subir `node_modules/`, `dist/`, `.next/`, `build/` ni `backend/runs/`.
-- Los archivos `.mem` mezclan instrucciones de 16 y 32 bits.
-- Las instrucciones de 32 bits se guardan en dos lineas: primero `low`, luego
-  `high`.
-- Las instrucciones comprimidas de 16 bits usan una sola linea.
+No subir carpetas generadas:
+
+```text
+node_modules/
+dist/
+.next/
+build/
+backend/runs/
+```
