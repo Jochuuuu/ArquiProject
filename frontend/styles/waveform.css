@@ -1,0 +1,322 @@
+@reference "../globals.css";
+
+@layer components {
+  .waveform-panel {
+    @apply flex min-h-0 flex-1 flex-col bg-surface-container-lowest;
+  }
+
+  .waveform-toolbar {
+    @apply flex h-7 flex-shrink-0 items-center justify-between border-b border-outline-variant bg-surface-container px-3;
+  }
+
+  .waveform-title {
+    @apply font-code-sm text-[10px] text-on-surface-variant;
+  }
+
+  .waveform-download {
+    @apply font-code-sm text-[10px] text-primary hover:underline;
+  }
+
+  .waveform-scroll {
+    @apply min-h-0 min-w-0 flex-1 overflow-auto;
+  }
+
+  .waveform-content {
+    @apply flex min-h-0 min-w-0 flex-1;
+  }
+
+  .waveform-signal-picker {
+    @apply flex w-56 flex-shrink-0 flex-col border-r border-outline-variant bg-surface-container-low;
+  }
+
+  .waveform-signal-picker-header {
+    @apply flex h-8 items-center justify-between border-b border-outline-variant px-3 font-label-caps text-label-caps text-on-surface-variant;
+  }
+
+  .waveform-signal-picker-actions {
+    @apply flex gap-2 border-b border-outline-variant p-2;
+  }
+
+  .waveform-signal-picker-actions button {
+    @apply h-7 flex-1 border border-outline-variant bg-surface-container px-2 font-code-sm text-[10px] text-on-surface hover:bg-surface-container-high;
+  }
+
+  .waveform-zoom-controls {
+    @apply flex h-9 items-center gap-2 border-b border-outline-variant px-2;
+  }
+
+  .waveform-zoom-controls button {
+    @apply flex h-6 w-7 items-center justify-center border border-outline-variant bg-surface-container font-code-sm text-[12px] text-on-surface hover:bg-surface-container-high disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .waveform-zoom-controls span {
+    @apply min-w-16 flex-1 text-center font-code-sm text-[10px] text-on-surface-variant;
+  }
+
+  .waveform-signal-picker-list {
+    @apply min-h-0 flex-1 overflow-auto py-1;
+  }
+
+  .waveform-signal-option {
+    @apply flex h-7 cursor-pointer items-center gap-2 px-3 font-code-sm text-[11px] text-on-surface hover:bg-surface-container;
+  }
+
+  .waveform-signal-option input {
+    @apply h-3.5 w-3.5 accent-primary;
+  }
+
+  .waveform-signal-loading {
+    @apply px-3 py-2 font-code-sm text-[10px] text-outline;
+  }
+
+  .waveform-grid {
+    @apply grid w-max min-w-full font-code-sm text-[9px];
+    grid-template-columns: 8.5rem repeat(var(--waveform-cycles, 1), var(--waveform-column-width, 2.75rem));
+  }
+
+  .waveform-corner {
+    @apply sticky left-0 top-0 z-20 border-b border-r border-outline-variant bg-surface-container px-3 py-1 font-label-caps text-label-caps text-on-surface-variant;
+  }
+
+  .waveform-cycle-head {
+    @apply sticky top-0 z-10 border-b border-r border-outline-variant bg-surface-container px-2 py-1 text-center text-outline;
+  }
+
+  .waveform-signal-name {
+    @apply sticky left-0 z-10 border-b border-r border-outline-variant bg-surface-container-low px-3 py-1.5 text-primary;
+    height: var(--waveform-row-height, 1.75rem);
+    min-height: var(--waveform-row-height, 1.75rem);
+  }
+
+  .waveform-cell {
+    @apply min-h-7 overflow-hidden border-b border-r border-outline-variant px-1 py-1 text-center tabular-nums;
+    height: var(--waveform-row-height, 1.75rem);
+    min-height: var(--waveform-row-height, 1.75rem);
+  }
+
+  .waveform-cell--bus {
+    @apply bg-surface-bright text-on-surface;
+  }
+
+  .waveform-cell--high {
+    @apply bg-primary text-on-primary font-bold;
+  }
+
+  .waveform-cell--low {
+    @apply bg-surface-container-high text-outline;
+  }
+
+  .waveform-cell--unknown {
+    @apply bg-error/10 text-error font-bold;
+  }
+
+  .waveform-empty {
+    @apply flex min-h-0 flex-1 flex-col items-center justify-center gap-3 p-6 text-center text-outline;
+  }
+
+  .waveform-empty-icon {
+    @apply text-[32px];
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .waveform-empty-text {
+    @apply max-w-xs font-body-sm text-body-sm;
+  }
+
+  .waveform-modal-backdrop {
+    @apply fixed inset-0 z-[120] flex items-center justify-center bg-black/45 p-4;
+  }
+
+  .waveform-modal-backdrop--hidden {
+    @apply hidden;
+  }
+
+  .waveform-modal {
+    @apply flex h-[72vh] w-[88vw] min-w-[720px] max-w-[1500px] flex-col overflow-hidden border border-[#5f6368] bg-[#202124] shadow-2xl;
+  }
+
+  .waveform-modal--maximized {
+    @apply h-screen w-screen max-w-none border-0;
+  }
+
+  .waveform-modal-header {
+    @apply flex h-10 flex-shrink-0 items-center justify-between border-b border-[#5f6368] bg-[#3c4043] pl-3 pr-0 text-white;
+  }
+
+  .waveform-modal-title-group {
+    @apply flex items-center gap-3;
+  }
+
+  .waveform-modal-icon {
+    @apply text-[20px] text-[#8ab4f8];
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .waveform-modal-title {
+    @apply font-code-sm text-[13px] font-bold;
+  }
+
+  .waveform-modal-subtitle {
+    @apply font-code-sm text-[10px] text-white/60;
+  }
+
+  .waveform-modal-actions {
+    @apply flex h-full items-center gap-1;
+  }
+
+  .waveform-window-button {
+    @apply flex h-10 w-10 items-center justify-center text-white/80 hover:bg-[#4a4d50] hover:text-white;
+  }
+
+  .waveform-window-button .material-symbols-outlined {
+    @apply text-[18px];
+  }
+
+  .waveform-close-button {
+    @apply flex h-10 w-10 items-center justify-center text-white/80 hover:bg-[#8b1f1f] hover:text-white;
+  }
+
+  .waveform-close-button .material-symbols-outlined {
+    @apply text-[18px];
+  }
+
+  .waveform-modal-body {
+    @apply flex min-h-0 flex-1 overflow-hidden;
+  }
+
+  .waveform-modal .waveform-panel {
+    @apply min-w-0 bg-[#202124] text-white;
+  }
+
+  .waveform-modal .waveform-signal-picker {
+    @apply border-[#5f6368] bg-[#2b2b2b] text-white;
+  }
+
+  .waveform-modal .waveform-signal-picker-header {
+    @apply border-[#5f6368] bg-[#303134] text-white/70;
+  }
+
+  .waveform-modal .waveform-signal-picker-actions {
+    @apply border-[#5f6368] bg-[#2b2b2b];
+  }
+
+  .waveform-modal .waveform-signal-picker-actions button {
+    @apply border-[#5f6368] bg-[#3c4043] text-white hover:bg-[#4a4d50];
+  }
+
+  .waveform-modal .waveform-zoom-controls {
+    @apply border-[#5f6368] bg-[#2b2b2b];
+  }
+
+  .waveform-modal .waveform-zoom-controls button {
+    @apply border-[#5f6368] bg-[#3c4043] text-white hover:bg-[#4a4d50] disabled:opacity-35;
+  }
+
+  .waveform-modal .waveform-zoom-controls span {
+    @apply text-white/60;
+  }
+
+  .waveform-modal .waveform-signal-option {
+    @apply text-white/80 hover:bg-[#3c4043];
+  }
+
+  .waveform-modal .waveform-signal-loading {
+    @apply text-white/50;
+  }
+
+  .waveform-modal .waveform-toolbar {
+    @apply h-8 border-[#5f6368] bg-[#202124] px-3 text-white;
+  }
+
+  .waveform-modal .waveform-title {
+    @apply text-white/70;
+  }
+
+  .waveform-modal .waveform-download {
+    @apply text-[#8ab4f8];
+  }
+
+  .waveform-modal .waveform-corner,
+  .waveform-modal .waveform-cycle-head {
+    @apply h-6 border-[#5f6368] bg-[#303134] px-1 py-1 text-white/70;
+  }
+
+  .waveform-modal .waveform-signal-name {
+    @apply h-7 overflow-hidden truncate border-[#5f6368] bg-[#2b2b2b] px-2 py-1 text-white;
+    height: var(--waveform-row-height, 1.75rem);
+    min-height: var(--waveform-row-height, 1.75rem);
+  }
+
+  .waveform-modal .waveform-cell {
+    @apply relative h-7 min-h-7 overflow-hidden border-b border-r border-[#3f4245] bg-[#202124] px-0.5 py-1 text-center text-[8px] text-white;
+    height: var(--waveform-row-height, 1.75rem);
+    min-height: var(--waveform-row-height, 1.75rem);
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  .waveform-modal .waveform-cell--same-prev {
+    @apply border-l-0;
+  }
+
+  .waveform-modal .waveform-cell--same-next {
+    border-right-color: transparent;
+  }
+
+  .waveform-modal .waveform-cell--bus {
+    @apply bg-[#202124] text-white;
+    box-shadow: inset 0 6px 0 -5px #00ff2a, inset 0 -6px 0 -5px #00ff2a;
+  }
+
+  .waveform-modal .waveform-cell--high {
+    @apply bg-[#202124] text-white;
+    box-shadow: inset 0 4px 0 #00ff2a;
+  }
+
+  .waveform-modal .waveform-cell--low {
+    @apply bg-[#202124] text-white/55;
+    box-shadow: inset 0 -4px 0 #00ff2a;
+  }
+
+  .waveform-modal .waveform-cell--unknown {
+    @apply bg-[#281515] text-[#ff6b6b];
+    box-shadow: inset 0 6px 0 -5px #ff3b3b, inset 0 -6px 0 -5px #ff3b3b;
+  }
+
+  .waveform-modal .waveform-cell--changed::before {
+    @apply absolute left-0 top-0 h-full w-px;
+    content: "";
+    background: rgba(0, 255, 42, 0.75);
+    box-shadow: 1px 0 5px rgba(0, 255, 42, 0.18);
+  }
+
+  .waveform-modal .waveform-cell--unknown.waveform-cell--changed::before {
+    background: rgba(255, 59, 59, 0.8);
+    box-shadow: 1px 0 5px rgba(255, 59, 59, 0.2);
+  }
+
+  .waveform-modal .waveform-cell--bit.waveform-cell--changed::before {
+    background: rgba(0, 255, 42, 0.75);
+    width: 1px;
+  }
+
+  .waveform-modal .waveform-cell--bit.waveform-cell--unknown.waveform-cell--changed::before {
+    background: #ff3b3b;
+  }
+
+  .waveform-modal .waveform-empty {
+    @apply bg-[#202124] text-white/60;
+  }
+
+  .waveform-minimized-bar {
+    @apply fixed bottom-4 right-4 z-[121] flex h-10 items-center gap-2 border border-[#5f6368] bg-[#3c4043] px-4 font-code-sm text-[12px] font-bold text-white shadow-2xl hover:bg-[#4a4d50];
+  }
+
+  .waveform-minimized-bar .material-symbols-outlined {
+    @apply text-[18px] text-[#8ab4f8];
+  }
+}

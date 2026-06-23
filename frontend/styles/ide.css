@@ -1,0 +1,613 @@
+@reference "../globals.css";
+
+@layer components {
+  .ide-main {
+    @apply flex h-screen flex-1 overflow-hidden pt-toolbar-height pb-8;
+  }
+
+  .ide-workspace {
+    @apply flex min-h-0 flex-1 flex-col overflow-hidden;
+  }
+
+  .ide-panel-row {
+    @apply flex min-h-0 flex-1 overflow-hidden;
+  }
+
+  .ide-left-panel {
+    @apply min-h-0 flex flex-col overflow-hidden bg-surface-container-low border-r border-outline-variant;
+    flex: 0 0 auto;
+  }
+
+  .ide-tab-bar {
+    @apply flex h-8 bg-surface-container border-b border-outline-variant flex-shrink-0;
+  }
+
+  .ide-tab {
+    @apply px-4 h-full flex items-center gap-2 transition-colors;
+  }
+
+  .ide-tab--active {
+    @apply border-t-2 border-primary bg-surface-container-low text-primary;
+  }
+
+  .ide-tab--inactive {
+    @apply text-on-surface-variant hover:bg-surface-container-high opacity-70 hover:opacity-100;
+  }
+
+  .ide-tab:disabled {
+    @apply cursor-not-allowed opacity-35 hover:bg-transparent;
+  }
+
+  .ide-tab-action {
+    @apply ml-auto h-full px-3 font-label-caps text-label-caps text-primary hover:bg-surface-container-high transition-colors;
+  }
+
+  .ide-resizer {
+    @apply w-1.5 flex-shrink-0 cursor-col-resize bg-outline-variant/50 hover:bg-primary transition-colors;
+  }
+
+  .ide-detached-panel {
+    @apply min-h-0 flex flex-col overflow-hidden bg-surface-container-lowest border-r border-outline-variant;
+    flex: 0 0 auto;
+  }
+
+  .ide-detached-header {
+    @apply flex h-8 flex-shrink-0 items-center justify-between bg-surface-container px-3 border-b border-outline-variant text-primary;
+  }
+
+  .ide-panel-command {
+    @apply font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors;
+  }
+
+  .ide-label {
+    @apply font-label-caps text-label-caps;
+  }
+
+  .ide-section-label {
+    @apply font-label-caps text-label-caps text-on-surface-variant tracking-widest;
+  }
+
+  .ide-code-badge {
+    @apply font-code-sm text-[10px] border px-1.5 py-0.5;
+  }
+
+  .ide-empty-state {
+    @apply flex-1 flex flex-col items-center justify-center gap-3 text-center p-6;
+  }
+
+  .ide-empty-icon {
+    @apply text-[36px] text-outline;
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .ide-empty-text {
+    @apply font-body-sm text-body-sm text-outline;
+  }
+
+  .ide-status-bar {
+    @apply fixed bottom-0 left-0 w-full flex justify-between items-center px-panel-padding h-8 z-50 bg-surface-container-highest border-t border-outline-variant font-code-sm text-code-sm text-on-surface-variant;
+    box-shadow: none;
+  }
+
+  .ide-status-group {
+    @apply flex items-center gap-4;
+  }
+
+  .ide-status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .ide-status-dot--running {
+    @apply bg-yellow-400 animate-pulse;
+  }
+
+  .ide-status-dot--ready {
+    @apply bg-primary;
+  }
+
+  .ide-separator {
+    @apply opacity-70;
+  }
+
+  .ide-status-steps {
+    @apply font-bold;
+  }
+
+  .ide-status-steps--limit {
+    @apply text-yellow-500;
+  }
+
+  .ide-status-steps--ok {
+    @apply text-primary;
+  }
+
+  .ide-footer-links {
+    @apply flex gap-6;
+  }
+
+  .ide-footer-link {
+    @apply opacity-70 hover:text-primary transition-colors;
+  }
+
+  .topbar {
+    @apply fixed top-0 w-full z-50 h-toolbar-height bg-inverse-surface border-b border-[#003a61] text-white flex items-center justify-between px-panel-padding;
+    box-shadow: none;
+  }
+
+  .topbar-actions {
+    @apply flex items-center gap-2;
+  }
+
+  .topbar-status {
+    @apply font-body-md text-body-md italic font-semibold mr-3;
+  }
+
+  .topbar-button {
+    @apply h-8 px-3 flex items-center gap-1.5 border border-[#0c3150] bg-white text-black font-body-sm text-body-sm shadow-sm hover:bg-surface-container transition-colors disabled:opacity-45 disabled:cursor-not-allowed;
+  }
+
+  .topbar-button--active {
+    @apply bg-primary text-on-primary border-primary;
+  }
+
+  .topbar-menu-button {
+    @apply h-8 px-3 flex items-center gap-1.5 bg-primary-container text-white font-body-sm text-body-sm hover:opacity-90 transition-opacity;
+  }
+
+  .topbar-file-input {
+    @apply hidden;
+  }
+
+  .topbar-brand-group {
+    @apply flex items-center gap-3;
+  }
+
+  .topbar-brand {
+    @apply font-display-mono text-[16px] text-white tracking-tight hover:opacity-80 transition-opacity;
+  }
+
+  .editor-panel {
+    @apply min-h-0 flex flex-1 flex-col overflow-hidden bg-surface-container-lowest border-r border-outline-variant;
+  }
+
+  .editor-split {
+    @apply min-h-0 flex flex-1 overflow-hidden;
+  }
+
+  .editor-tabbar {
+    @apply flex items-center justify-between h-8 bg-surface-container px-3 border-b border-outline-variant;
+  }
+
+  .editor-file-label {
+    @apply flex items-center gap-2;
+  }
+
+  .editor-file-icon {
+    @apply text-[14px] text-on-surface-variant;
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .editor-file-name {
+    @apply font-label-caps text-label-caps text-on-surface-variant;
+  }
+
+  .editor-line-count {
+    @apply font-code-sm text-[10px] text-outline;
+  }
+
+  .editor-body {
+    @apply min-h-0 flex-1 overflow-hidden flex bg-surface-bright relative;
+  }
+
+  .editor-line-numbers {
+    @apply w-12 bg-surface-container-low text-right pr-3 py-4 text-outline select-none border-r border-outline-variant overflow-hidden flex-shrink-0;
+  }
+
+  .editor-binary-state {
+    @apply flex-1 py-8 px-4 flex flex-col items-center justify-center text-on-surface-variant opacity-70;
+  }
+
+  .editor-binary-icon {
+    @apply text-4xl mb-4;
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .editor-binary-text {
+    @apply font-body-md text-center max-w-xs;
+  }
+
+  .editor-binary-hint {
+    @apply text-xs mt-2 block;
+  }
+
+  .editor-textarea {
+    @apply flex-1 py-4 px-4 bg-transparent resize-none outline-none text-primary w-full;
+  }
+
+  .generated-mem-shell {
+    @apply min-h-0 min-w-[260px] flex flex-col overflow-hidden;
+    flex: 0 0 auto;
+  }
+
+  .generated-mem-panel {
+    @apply min-h-0 flex flex-1 flex-col overflow-hidden bg-surface-container-low;
+  }
+
+  .generated-mem-header {
+    @apply flex h-8 flex-shrink-0 items-center justify-between bg-surface-container px-3 border-b border-outline-variant;
+  }
+
+  .generated-mem-body {
+    @apply min-h-0 flex-1 overflow-auto py-4 font-code-sm text-[11px];
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .generated-mem-line {
+    @apply grid items-start gap-2 px-3 py-0.5;
+    grid-template-columns: 2.5rem 4.5rem minmax(0, 1fr);
+  }
+
+  .generated-mem-line-number {
+    @apply text-right text-outline select-none;
+  }
+
+  .generated-mem-hex {
+    @apply text-primary font-bold tabular-nums;
+  }
+
+  .generated-mem-comment {
+    @apply min-w-0 whitespace-pre-wrap break-words text-on-surface-variant;
+  }
+
+  .generated-mem-empty {
+    @apply flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center text-outline;
+  }
+
+  .generated-mem-empty-icon {
+    @apply text-[32px];
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .generated-mem-empty-text {
+    @apply max-w-[220px] font-body-sm text-body-sm;
+  }
+
+  .register-panel {
+    @apply min-h-0 flex-1 overflow-y-auto p-panel-padding pb-10;
+  }
+
+  .register-header {
+    @apply flex items-center justify-between mb-2;
+  }
+
+  .register-format {
+    @apply font-code-sm text-[10px] border px-1.5 py-0.5 text-outline border-outline-variant;
+  }
+
+  .register-grid {
+    @apply grid grid-cols-2 gap-gutter bg-outline-variant border border-outline-variant;
+  }
+
+  .register-grid-heading {
+    @apply bg-surface-container-highest p-1 text-center font-label-caps text-label-caps text-on-surface-variant;
+  }
+
+  .register-row-name {
+    @apply p-2 font-code-sm text-code-sm border-r border-outline-variant;
+  }
+
+  .register-row-name--changed {
+    @apply bg-primary-fixed text-on-surface;
+  }
+
+  .register-row-name--idle {
+    @apply bg-surface-container-lowest text-on-surface-variant;
+  }
+
+  .register-alias {
+    @apply opacity-50;
+  }
+
+  .register-row-value {
+    @apply p-2 font-code-sm text-code-sm tabular-nums;
+  }
+
+  .register-row-value--changed {
+    @apply text-primary font-bold bg-primary-fixed;
+  }
+
+  .register-row-value--idle {
+    @apply text-outline bg-surface-container-lowest;
+  }
+
+  .memory-panel {
+    @apply min-h-0 flex-1 flex flex-col overflow-hidden;
+  }
+
+  .memory-toolbar {
+    @apply flex items-center justify-between px-panel-padding py-2 bg-surface-container border-b border-outline-variant gap-4 flex-shrink-0;
+  }
+
+  .memory-toolbar-group {
+    @apply flex items-center gap-3;
+  }
+
+  .memory-range {
+    @apply font-code-sm text-[10px] border px-1.5 py-0.5 text-primary border-primary/30;
+  }
+
+  .memory-filter {
+    @apply flex items-center gap-1.5 cursor-pointer font-body-sm text-[11px] text-on-surface-variant;
+  }
+
+  .memory-checkbox {
+    @apply w-3 h-3 accent-primary;
+  }
+
+  .memory-view-toggle {
+    @apply flex flex-shrink-0 border border-outline-variant bg-surface-container-lowest;
+  }
+
+  .memory-view-button {
+    @apply px-3 py-1 font-label-caps text-label-caps text-on-surface-variant hover:bg-surface-container-high transition-colors;
+  }
+
+  .memory-view-button--active {
+    @apply bg-primary text-on-primary hover:bg-primary;
+  }
+
+  .memory-table-scroll {
+    @apply flex-1 overflow-auto p-panel-padding font-code-sm text-[11px];
+  }
+
+  .memory-table {
+    @apply w-full border-collapse;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .memory-table-head {
+    @apply text-on-surface-variant;
+  }
+
+  .memory-address-head {
+    @apply text-left pr-4 pb-1 font-label-caps text-label-caps tracking-widest opacity-70 w-24;
+  }
+
+  .memory-byte-head {
+    @apply w-6 text-center pb-1 font-label-caps text-label-caps opacity-50;
+  }
+
+  .memory-ascii-head {
+    @apply pl-4 text-left pb-1 font-label-caps text-label-caps opacity-70;
+  }
+
+  .memory-row {
+    @apply hover:bg-surface-container-high transition-colors;
+  }
+
+  .memory-row--program {
+    @apply bg-primary-fixed/20;
+  }
+
+  .memory-address-cell {
+    @apply pr-4 py-0.5 text-primary font-semibold tabular-nums;
+  }
+
+  .memory-byte-cell {
+    @apply w-6 text-center py-0.5 tabular-nums;
+  }
+
+  .memory-byte-cell--zero {
+    @apply text-outline opacity-30;
+  }
+
+  .memory-byte-cell--code {
+    @apply text-primary font-bold;
+  }
+
+  .memory-byte-cell--data {
+    @apply text-on-surface;
+  }
+
+  .memory-byte-cell--changed {
+    @apply bg-primary text-on-primary font-bold;
+  }
+
+  .memory-ascii-cell {
+    @apply pl-4 py-0.5 text-on-surface-variant tracking-wider;
+  }
+
+  .memory-pagination {
+    @apply flex items-center justify-between px-panel-padding py-2 bg-surface-container border-t border-outline-variant flex-shrink-0;
+  }
+
+  .memory-page-button {
+    @apply flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors;
+  }
+
+  .memory-page-icon {
+    @apply text-[16px];
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .memory-page-label {
+    @apply font-code-sm text-[10px] text-outline;
+  }
+
+  .console-panel {
+    @apply h-48 bg-surface-container-lowest text-on-surface border-t-4 border-tertiary-container flex flex-col z-10 flex-shrink-0;
+  }
+
+  .console-header {
+    @apply flex items-center h-8 bg-inverse-surface px-3 border-b border-[#003a61] justify-between flex-shrink-0;
+  }
+
+  .console-tabs {
+    @apply flex gap-4;
+  }
+
+  .console-tab {
+    @apply font-label-caps text-label-caps;
+  }
+
+  .console-tab--active {
+    @apply text-white border-b border-white pb-0.5;
+  }
+
+  .console-tab--disabled {
+    @apply text-white/45 cursor-not-allowed;
+  }
+
+  .console-count {
+    @apply font-code-sm text-[10px] text-white/60;
+  }
+
+  .console-body {
+    @apply flex-1 p-3 font-code-sm text-code-sm overflow-y-auto leading-relaxed;
+  }
+
+  .console-log {
+    @apply flex gap-2 mt-0.5 px-1 py-0.5;
+  }
+
+  .console-log--error {
+    @apply bg-error/5;
+  }
+
+  .console-log--warn {
+    @apply bg-[#8a5b24]/5;
+  }
+
+  .console-log-type {
+    @apply flex-shrink-0 font-bold;
+  }
+
+  .console-log-type--success {
+    @apply text-primary;
+  }
+
+  .console-log-type--error {
+    @apply text-error;
+  }
+
+  .console-log-type--info {
+    @apply text-secondary;
+  }
+
+  .console-log-type--warn {
+    @apply text-[#8a5b24];
+  }
+
+  .console-log-message {
+    @apply text-on-surface;
+  }
+
+  .console-log-message--error {
+    @apply text-error;
+  }
+
+  .console-timestamp {
+    @apply ml-auto text-outline text-[10px] flex-shrink-0;
+  }
+
+  .settings-backdrop {
+    @apply fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm;
+  }
+
+  .settings-dialog {
+    @apply bg-surface-container-lowest border border-outline-variant w-full max-w-md shadow-2xl flex flex-col;
+  }
+
+  .settings-header {
+    @apply flex items-center justify-between px-6 py-4 border-b border-outline-variant bg-surface-container;
+  }
+
+  .settings-title {
+    @apply font-display-mono text-[18px] text-on-surface;
+  }
+
+  .settings-close {
+    @apply text-on-surface-variant hover:text-on-surface transition-colors;
+  }
+
+  .settings-close-icon {
+    @apply text-[20px];
+    font-family: "Material Symbols Outlined";
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+    line-height: 1;
+  }
+
+  .settings-form {
+    @apply flex flex-col flex-1;
+  }
+
+  .settings-body {
+    @apply p-6 flex flex-col gap-6 overflow-y-auto max-h-[60vh];
+  }
+
+  .settings-field {
+    @apply flex flex-col gap-2;
+  }
+
+  .settings-inline {
+    @apply flex items-center gap-2;
+  }
+
+  .settings-control {
+    @apply bg-surface-container-low border border-outline-variant px-3 py-1.5 outline-none focus:border-primary transition-colors;
+  }
+
+  .settings-number {
+    @apply bg-surface-container-low border border-outline-variant px-3 py-1.5 outline-none focus:border-primary transition-colors font-code-sm text-code-sm w-full;
+  }
+
+  .settings-select {
+    @apply bg-surface-container-low border border-outline-variant px-3 py-1.5 outline-none focus:border-primary transition-colors font-body-sm text-body-sm;
+  }
+
+  .settings-limit {
+    @apply font-body-sm text-[11px] text-outline whitespace-nowrap;
+  }
+
+  .settings-help {
+    @apply font-body-sm text-[11px] text-on-surface-variant;
+  }
+
+  .settings-divider {
+    @apply h-px bg-outline-variant/50;
+  }
+
+  .settings-choice-group {
+    @apply flex gap-4;
+  }
+
+  .settings-choice {
+    @apply flex items-center gap-2 font-body-sm text-body-sm cursor-pointer;
+  }
+
+  .settings-input-choice {
+    @apply accent-primary;
+  }
+
+  .settings-actions {
+    @apply px-6 py-4 border-t border-outline-variant bg-surface-container flex justify-end gap-3 mt-auto;
+  }
+
+  .settings-cancel {
+    @apply px-4 py-1.5 font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors;
+  }
+
+  .settings-save {
+    @apply px-4 py-1.5 bg-primary text-on-primary font-body-sm text-body-sm hover:opacity-90 active:scale-95 transition-all shadow-sm;
+  }
+}
