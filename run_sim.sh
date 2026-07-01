@@ -38,8 +38,9 @@ iverilog -g2005 -o "$SIM_OUT" \
   src/components/mux3.v src/components/flopr.v src/components/adder.v \
   src/mem/imem.v src/mem/dmem.v
 
-echo "Running simulation with MEMFILE=$MEMFILE"
-(cd "$BUILD_DIR" && vvp "./riscv_pipe_sim" "+MEMFILE=../$MEMFILE")
+MAX_CYCLES="${MAX_CYCLES:-5000}"
+echo "Running simulation with MEMFILE=$MEMFILE MAX_CYCLES=$MAX_CYCLES"
+(cd "$BUILD_DIR" && vvp "./riscv_pipe_sim" "+MEMFILE=../$MEMFILE" "+MAX_CYCLES=$MAX_CYCLES")
 
 echo "VCD generated: $VCD_OUT"
 
