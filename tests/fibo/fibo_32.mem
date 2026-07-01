@@ -1,0 +1,92 @@
+0113
+// low  de 0F000113 ; addi  x2,  x0, 240
+0F00
+// high de 0F000113 ; addi  x2,  x0, 240
+0513
+// low  de 00400513 ; addi  x10, x0, 4
+0040
+// high de 00400513 ; addi  x10, x0, 4
+00EF
+// low  de 00C000EF ; jal   x1,  fib
+00C0
+// high de 00C000EF ; jal   x1,  fib
+2223
+// low  de 06A02223 ; sw    x10, 100(x0)
+06A0
+// high de 06A02223 ; sw    x10, 100(x0)
+0063
+// low  de 00000063 ; beq   x0,  x0, 0
+0000
+// high de 00000063 ; beq   x0,  x0, 0
+0263
+// low  de 04050263 ; beq   x10, x0,  base_ret
+0405
+// high de 04050263 ; beq   x10, x0,  base_ret
+0293
+// low  de FFF50293 ; addi  x5,  x10, -1
+FFF5
+// high de FFF50293 ; addi  x5,  x10, -1
+8E63
+// low  de 02028E63 ; beq   x5,  x0,  base_ret
+0202
+// high de 02028E63 ; beq   x5,  x0,  base_ret
+0113
+// low  de FF410113 ; addi  x2,  x2, -12
+FF41
+// high de FF410113 ; addi  x2,  x2, -12
+2423
+// low  de 00112423 ; sw    x1,  8(x2)
+0011
+// high de 00112423 ; sw    x1,  8(x2)
+2223
+// low  de 00A12223 ; sw    x10, 4(x2)
+00A1
+// high de 00A12223 ; sw    x10, 4(x2)
+0513
+// low  de FFF50513 ; addi  x10, x10, -1
+FFF5
+// high de FFF50513 ; addi  x10, x10, -1
+F0EF
+// low  de FE5FF0EF ; jal   x1,  fib
+FE5F
+// high de FE5FF0EF ; jal   x1,  fib
+2023
+// low  de 00A12023 ; sw    x10, 0(x2)
+00A1
+// high de 00A12023 ; sw    x10, 0(x2)
+2503
+// low  de 00412503 ; lw    x10, 4(x2)
+0041
+// high de 00412503 ; lw    x10, 4(x2)
+0513
+// low  de FFE50513 ; addi  x10, x10, -2
+FFE5
+// high de FFE50513 ; addi  x10, x10, -2
+F0EF
+// low  de FD5FF0EF ; jal   x1,  fib
+FD5F
+// high de FD5FF0EF ; jal   x1,  fib
+2303
+// low  de 00012303 ; lw    x6,  0(x2)
+0001
+// high de 00012303 ; lw    x6,  0(x2)
+0533
+// low  de 00650533 ; add   x10, x10, x6
+0065
+// high de 00650533 ; add   x10, x10, x6
+2083
+// low  de 00812083 ; lw    x1,  8(x2)
+0081
+// high de 00812083 ; lw    x1,  8(x2)
+0113
+// low  de 00C10113 ; addi  x2,  x2, 12
+00C1
+// high de 00C10113 ; addi  x2,  x2, 12
+8067
+// low  de 00008067 ; jalr  x0,  0(x1)
+0000
+// high de 00008067 ; jalr  x0,  0(x1)
+8067
+// low  de 00008067 ; jalr  x0,  0(x1)
+0000
+// high de 00008067 ; jalr  x0,  0(x1)

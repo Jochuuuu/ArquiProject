@@ -1,0 +1,72 @@
+0093
+// low  de 00000093 ; addi  x1, x0, 0
+0000
+// high de 00000093 ; addi  x1, x0, 0
+0113
+// low  de 00000113 ; addi  x2, x0, 0
+0000
+// high de 00000113 ; addi  x2, x0, 0
+0413
+// low  de 01400413 ; addi  x8, x0, 20
+0140
+// high de 01400413 ; addi  x8, x0, 20
+0493
+// low  de 00500493 ; addi  x9, x0, 5
+0050
+// high de 00500493 ; addi  x9, x0, 5
+8093
+// low  de 00508093 ; addi  x1, x1, 5
+0050
+// high de 00508093 ; addi  x1, x1, 5
+0113
+// low  de 00310113 ; addi  x2, x2, 3
+0031
+// high de 00310113 ; addi  x2, x2, 3
+80B3
+// low  de 002080B3 ; add   x1, x1, x2
+0020
+// high de 002080B3 ; add   x1, x1, x2
+9093
+// low  de 00109093 ; slli  x1, x1, 1
+0010
+// high de 00109093 ; slli  x1, x1, 1
+12B7
+// low  de 000012B7 ; lui   x5, 1
+0000
+// high de 000012B7 ; lui   x5, 1
+0433
+// low  de 40940433 ; sub   x8, x8, x9
+4094
+// high de 40940433 ; sub   x8, x8, x9
+4433
+// low  de 00944433 ; xor   x8, x8, x9
+0094
+// high de 00944433 ; xor   x8, x8, x9
+6433
+// low  de 00946433 ; or    x8, x8, x9
+0094
+// high de 00946433 ; or    x8, x8, x9
+7433
+// low  de 00947433 ; and   x8, x8, x9
+0094
+// high de 00947433 ; and   x8, x8, x9
+5413
+// low  de 00145413 ; srli  x8, x8, 1
+0014
+// high de 00145413 ; srli  x8, x8, 1
+5413
+// low  de 40145413 ; srai  x8, x8, 1
+4014
+// high de 40145413 ; srai  x8, x8, 1
+8093
+// low  de 00908093 ; addi  x1, x1, 9
+0090
+// high de 00908093 ; addi  x1, x1, 9
+2223
+// low  de 06102223 ; sw    x1, 100(x0)
+0610
+// high de 06102223 ; sw    x1, 100(x0)
+0063
+// low  de 00000063 ; beq   x0, x0, 0
+0000
+// high de 00000063 ; beq   x0, x0, 0

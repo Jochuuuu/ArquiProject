@@ -1,0 +1,228 @@
+0513
+// low  de 06400513 ; addi  x10, x0, 100
+0640
+// high de 06400513 ; addi  x10, x0, 100
+0593
+// low  de 00400593 ; addi  x11, x0, 4
+0040
+// high de 00400593 ; addi  x11, x0, 4
+0293
+// low  de 00100293 ; addi  x5, x0, 1
+0010
+// high de 00100293 ; addi  x5, x0, 1
+2023
+// low  de 00552023 ; sw    x5, 0(x10)
+0055
+// high de 00552023 ; sw    x5, 0(x10)
+0293
+// low  de 00200293 ; addi  x5, x0, 2
+0020
+// high de 00200293 ; addi  x5, x0, 2
+2223
+// low  de 00552223 ; sw    x5, 4(x10)
+0055
+// high de 00552223 ; sw    x5, 4(x10)
+0293
+// low  de 00300293 ; addi  x5, x0, 3
+0030
+// high de 00300293 ; addi  x5, x0, 3
+2423
+// low  de 00552423 ; sw    x5, 8(x10)
+0055
+// high de 00552423 ; sw    x5, 8(x10)
+0293
+// low  de 00400293 ; addi  x5, x0, 4
+0040
+// high de 00400293 ; addi  x5, x0, 4
+2623
+// low  de 00552623 ; sw    x5, 12(x10)
+0055
+// high de 00552623 ; sw    x5, 12(x10)
+0293
+// low  de 00500293 ; addi  x5, x0, 5
+0050
+// high de 00500293 ; addi  x5, x0, 5
+2823
+// low  de 00552823 ; sw    x5, 16(x10)
+0055
+// high de 00552823 ; sw    x5, 16(x10)
+0293
+// low  de 00600293 ; addi  x5, x0, 6
+0060
+// high de 00600293 ; addi  x5, x0, 6
+2A23
+// low  de 00552A23 ; sw    x5, 20(x10)
+0055
+// high de 00552A23 ; sw    x5, 20(x10)
+0293
+// low  de 00700293 ; addi  x5, x0, 7
+0070
+// high de 00700293 ; addi  x5, x0, 7
+2C23
+// low  de 00552C23 ; sw    x5, 24(x10)
+0055
+// high de 00552C23 ; sw    x5, 24(x10)
+0293
+// low  de 00800293 ; addi  x5, x0, 8
+0080
+// high de 00800293 ; addi  x5, x0, 8
+2E23
+// low  de 00552E23 ; sw    x5, 28(x10)
+0055
+// high de 00552E23 ; sw    x5, 28(x10)
+0293
+// low  de 00900293 ; addi  x5, x0, 9
+0090
+// high de 00900293 ; addi  x5, x0, 9
+2023
+// low  de 02552023 ; sw    x5, 32(x10)
+0255
+// high de 02552023 ; sw    x5, 32(x10)
+0293
+// low  de 00A00293 ; addi  x5, x0, 10
+00A0
+// high de 00A00293 ; addi  x5, x0, 10
+2223
+// low  de 02552223 ; sw    x5, 36(x10)
+0255
+// high de 02552223 ; sw    x5, 36(x10)
+0293
+// low  de 00B00293 ; addi  x5, x0, 11
+00B0
+// high de 00B00293 ; addi  x5, x0, 11
+2423
+// low  de 02552423 ; sw    x5, 40(x10)
+0255
+// high de 02552423 ; sw    x5, 40(x10)
+0293
+// low  de 00C00293 ; addi  x5, x0, 12
+00C0
+// high de 00C00293 ; addi  x5, x0, 12
+2623
+// low  de 02552623 ; sw    x5, 44(x10)
+0255
+// high de 02552623 ; sw    x5, 44(x10)
+0293
+// low  de 00D00293 ; addi  x5, x0, 13
+00D0
+// high de 00D00293 ; addi  x5, x0, 13
+2823
+// low  de 02552823 ; sw    x5, 48(x10)
+0255
+// high de 02552823 ; sw    x5, 48(x10)
+0293
+// low  de 00E00293 ; addi  x5, x0, 14
+00E0
+// high de 00E00293 ; addi  x5, x0, 14
+2A23
+// low  de 02552A23 ; sw    x5, 52(x10)
+0255
+// high de 02552A23 ; sw    x5, 52(x10)
+0293
+// low  de 00F00293 ; addi  x5, x0, 15
+00F0
+// high de 00F00293 ; addi  x5, x0, 15
+2C23
+// low  de 02552C23 ; sw    x5, 56(x10)
+0255
+// high de 02552C23 ; sw    x5, 56(x10)
+0293
+// low  de 01000293 ; addi  x5, x0, 16
+0100
+// high de 01000293 ; addi  x5, x0, 16
+2E23
+// low  de 02552E23 ; sw    x5, 60(x10)
+0255
+// high de 02552E23 ; sw    x5, 60(x10)
+0293
+// low  de 00000293 ; addi  x5, x0, 0
+0000
+// high de 00000293 ; addi  x5, x0, 0
+0E13
+// low  de 00000E13 ; addi  x28, x0, 0
+0000
+// high de 00000E13 ; addi  x28, x0, 0
+D863
+// low  de 04B2D863 ; bge   x5, x11, _end
+04B2
+// high de 04B2D863 ; bge   x5, x11, _end
+0313
+// low  de 00000313 ; addi  x6, x0, 0
+0000
+// high de 00000313 ; addi  x6, x0, 0
+DF13
+// low  de 0015DF13 ; srli  x30, x11, 1
+0015
+// high de 0015DF13 ; srli  x30, x11, 1
+5D63
+// low  de 03E35D63 ; bge   x6, x30, _next_i
+03E3
+// high de 03E35D63 ; bge   x6, x30, _next_i
+0EB3
+// low  de 006E0EB3 ; add   x29, x28, x6
+006E
+// high de 006E0EB3 ; add   x29, x28, x6
+9393
+// low  de 002E9393 ; slli  x7, x29, 2
+002E
+// high de 002E9393 ; slli  x7, x29, 2
+83B3
+// low  de 00A383B3 ; add   x7, x7, x10
+00A3
+// high de 00A383B3 ; add   x7, x7, x10
+8E93
+// low  de FFF58E93 ; addi  x29, x11, -1
+FFF5
+// high de FFF58E93 ; addi  x29, x11, -1
+8EB3
+// low  de 406E8EB3 ; sub   x29, x29, x6
+406E
+// high de 406E8EB3 ; sub   x29, x29, x6
+8EB3
+// low  de 01CE8EB3 ; add   x29, x29, x28
+01CE
+// high de 01CE8EB3 ; add   x29, x29, x28
+9413
+// low  de 002E9413 ; slli  x8, x29, 2
+002E
+// high de 002E9413 ; slli  x8, x29, 2
+0433
+// low  de 00A40433 ; add   x8, x8, x10
+00A4
+// high de 00A40433 ; add   x8, x8, x10
+A483
+// low  de 0003A483 ; lw    x9, 0(x7)
+0003
+// high de 0003A483 ; lw    x9, 0(x7)
+2E83
+// low  de 00042E83 ; lw    x29, 0(x8)
+0004
+// high de 00042E83 ; lw    x29, 0(x8)
+A023
+// low  de 01D3A023 ; sw    x29, 0(x7)
+01D3
+// high de 01D3A023 ; sw    x29, 0(x7)
+2023
+// low  de 00942023 ; sw    x9, 0(x8)
+0094
+// high de 00942023 ; sw    x9, 0(x8)
+0305
+// c.addi x6, 1             ; compressed 16-bit
+F06F
+// low  de FCBFF06F ; jal   x0, _loop_j
+FCBF
+// high de FCBFF06F ; jal   x0, _loop_j
+0285
+// c.addi x5, 1             ; compressed 16-bit
+0E33
+// low  de 00BE0E33 ; add   x28, x28, x11
+00BE
+// high de 00BE0E33 ; add   x28, x28, x11
+F06F
+// low  de FB5FF06F ; jal   x0, _loop_i
+FB5F
+// high de FB5FF06F ; jal   x0, _loop_i
+0063
+// low  de 00000063 ; beq   x0, x0, 0
+0000
+// high de 00000063 ; beq   x0, x0, 0

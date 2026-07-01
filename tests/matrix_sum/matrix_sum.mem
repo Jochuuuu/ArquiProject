@@ -1,0 +1,144 @@
+0513
+// low  de 06400513 ; addi  x10, x0, 100
+0640
+// high de 06400513 ; addi  x10, x0, 100
+0593
+// low  de 07400593 ; addi  x11, x0, 116
+0740
+// high de 07400593 ; addi  x11, x0, 116
+0613
+// low  de 08400613 ; addi  x12, x0, 132
+0840
+// high de 08400613 ; addi  x12, x0, 132
+0293
+// low  de 00100293 ; addi  x5, x0, 1
+0010
+// high de 00100293 ; addi  x5, x0, 1
+2023
+// low  de 00552023 ; sw    x5, 0(x10)
+0055
+// high de 00552023 ; sw    x5, 0(x10)
+0293
+// low  de 00200293 ; addi  x5, x0, 2
+0020
+// high de 00200293 ; addi  x5, x0, 2
+2223
+// low  de 00552223 ; sw    x5, 4(x10)
+0055
+// high de 00552223 ; sw    x5, 4(x10)
+0293
+// low  de 00300293 ; addi  x5, x0, 3
+0030
+// high de 00300293 ; addi  x5, x0, 3
+2423
+// low  de 00552423 ; sw    x5, 8(x10)
+0055
+// high de 00552423 ; sw    x5, 8(x10)
+0293
+// low  de 00400293 ; addi  x5, x0, 4
+0040
+// high de 00400293 ; addi  x5, x0, 4
+2623
+// low  de 00552623 ; sw    x5, 12(x10)
+0055
+// high de 00552623 ; sw    x5, 12(x10)
+0293
+// low  de 00500293 ; addi  x5, x0, 5
+0050
+// high de 00500293 ; addi  x5, x0, 5
+A023
+// low  de 0055A023 ; sw    x5, 0(x11)
+0055
+// high de 0055A023 ; sw    x5, 0(x11)
+0293
+// low  de 00600293 ; addi  x5, x0, 6
+0060
+// high de 00600293 ; addi  x5, x0, 6
+A223
+// low  de 0055A223 ; sw    x5, 4(x11)
+0055
+// high de 0055A223 ; sw    x5, 4(x11)
+0293
+// low  de 00700293 ; addi  x5, x0, 7
+0070
+// high de 00700293 ; addi  x5, x0, 7
+A423
+// low  de 0055A423 ; sw    x5, 8(x11)
+0055
+// high de 0055A423 ; sw    x5, 8(x11)
+0293
+// low  de 00800293 ; addi  x5, x0, 8
+0080
+// high de 00800293 ; addi  x5, x0, 8
+A623
+// low  de 0055A623 ; sw    x5, 12(x11)
+0055
+// high de 0055A623 ; sw    x5, 12(x11)
+2283
+// low  de 00052283 ; lw    x5, 0(x10)
+0005
+// high de 00052283 ; lw    x5, 0(x10)
+A303
+// low  de 0005A303 ; lw    x6, 0(x11)
+0005
+// high de 0005A303 ; lw    x6, 0(x11)
+83B3
+// low  de 006283B3 ; add   x7, x5, x6
+0062
+// high de 006283B3 ; add   x7, x5, x6
+2023
+// low  de 00762023 ; sw    x7, 0(x12)
+0076
+// high de 00762023 ; sw    x7, 0(x12)
+2283
+// low  de 00452283 ; lw    x5, 4(x10)
+0045
+// high de 00452283 ; lw    x5, 4(x10)
+A303
+// low  de 0045A303 ; lw    x6, 4(x11)
+0045
+// high de 0045A303 ; lw    x6, 4(x11)
+83B3
+// low  de 006283B3 ; add   x7, x5, x6
+0062
+// high de 006283B3 ; add   x7, x5, x6
+2223
+// low  de 00762223 ; sw    x7, 4(x12)
+0076
+// high de 00762223 ; sw    x7, 4(x12)
+2283
+// low  de 00852283 ; lw    x5, 8(x10)
+0085
+// high de 00852283 ; lw    x5, 8(x10)
+A303
+// low  de 0085A303 ; lw    x6, 8(x11)
+0085
+// high de 0085A303 ; lw    x6, 8(x11)
+83B3
+// low  de 006283B3 ; add   x7, x5, x6
+0062
+// high de 006283B3 ; add   x7, x5, x6
+2423
+// low  de 00762423 ; sw    x7, 8(x12)
+0076
+// high de 00762423 ; sw    x7, 8(x12)
+2283
+// low  de 00C52283 ; lw    x5, 12(x10)
+00C5
+// high de 00C52283 ; lw    x5, 12(x10)
+A303
+// low  de 00C5A303 ; lw    x6, 12(x11)
+00C5
+// high de 00C5A303 ; lw    x6, 12(x11)
+83B3
+// low  de 006283B3 ; add   x7, x5, x6
+0062
+// high de 006283B3 ; add   x7, x5, x6
+2623
+// low  de 00762623 ; sw    x7, 12(x12)
+0076
+// high de 00762623 ; sw    x7, 12(x12)
+0063
+// low  de 00000063 ; beq   x0, x0, 0
+0000
+// high de 00000063 ; beq   x0, x0, 0

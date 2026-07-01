@@ -1,0 +1,34 @@
+// ictest1.mem  -- version con instrucciones comprimidas RVC
+// Prueba instrucciones aritmeticas comprimidas:
+// c.addi, c.add, c.slli, c.lui, c.sub, c.xor, c.or, c.and, c.srli, c.srai
+// Resultado esperado: mem[100] = 25
+
+0093  // low  de 00000093 ; addi  x1, x0, 0
+0000  // high de 00000093
+0113  // low  de 00000113 ; addi  x2, x0, 0
+0000  // high de 00000113
+0413  // low  de 01400413 ; addi  x8, x0, 20
+0140  // high de 01400413
+0493  // low  de 00500493 ; addi  x9, x0, 5
+0050  // high de 00500493
+
+0095  // c.addi x1, 5      -> x1 = 5
+010D  // c.addi x2, 3      -> x2 = 3
+908A  // c.add  x1, x2     -> x1 = 8
+0086  // c.slli x1, 1      -> x1 = 16
+6285  // c.lui  x5, 1      -> x5 = 0x1000
+
+8C05  // c.sub  x8, x9     -> x8 = 15
+8C25  // c.xor  x8, x9     -> x8 = 10
+8C45  // c.or   x8, x9     -> x8 = 15
+8C65  // c.and  x8, x9     -> x8 = 5
+8005  // c.srli x8, 1      -> x8 = 2
+8405  // c.srai x8, 1      -> x8 = 1
+
+00A5  // c.addi x1, 9      -> x1 = 25
+
+2223  // low  de 06102223 ; sw    x1, 100(x0)   -> mem[100] = 25
+0610  // high de 06102223
+
+0063  // low  de 00000063 ; beq   x0, x0, 0     (halt)
+0000  // high de 00000063

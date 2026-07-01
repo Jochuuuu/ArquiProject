@@ -35,16 +35,16 @@ export function SettingsModal({ initialSettings, onSave, onClose }: SettingsModa
                 <input
                   type="number"
                   min={100}
-                  max={5000}
+                  max={10000}
                   step={100}
                   value={draftSettings.maxSteps}
                   onChange={(e) => {
-                    const nextValue = Math.min(5000, Math.max(1, parseInt(e.target.value) || 5000));
+                    const nextValue = Math.min(10000, Math.max(1, parseInt(e.target.value) || 5100));
                     setDraftSettings({ ...draftSettings, maxSteps: nextValue });
                   }}
                   className="settings-number"
                 />
-                <span className="settings-limit">Max 5000</span>
+                <span className="settings-limit">Max 10000</span>
               </div>
               <p className="settings-help">
                 Previene loops infinitos. Si el programa alcanza este limite, se detendra automaticamente.

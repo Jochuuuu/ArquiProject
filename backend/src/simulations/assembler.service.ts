@@ -26,11 +26,16 @@ type RegisterInstruction = {
 };
 
 const R_INSTRUCTIONS: Record<string, RegisterInstruction> = {
-  add: { opcode: 0x33, funct3: 0x0, funct7: 0x00 },
-  sub: { opcode: 0x33, funct3: 0x0, funct7: 0x20 },
-  slt: { opcode: 0x33, funct3: 0x2, funct7: 0x00 },
-  or: { opcode: 0x33, funct3: 0x6, funct7: 0x00 },
-  and: { opcode: 0x33, funct3: 0x7, funct7: 0x00 },
+  add:  { opcode: 0x33, funct3: 0x0, funct7: 0x00 },
+  sub:  { opcode: 0x33, funct3: 0x0, funct7: 0x20 },
+  sll:  { opcode: 0x33, funct3: 0x1, funct7: 0x00 },
+  slt:  { opcode: 0x33, funct3: 0x2, funct7: 0x00 },
+  sltu: { opcode: 0x33, funct3: 0x3, funct7: 0x00 },
+  xor:  { opcode: 0x33, funct3: 0x4, funct7: 0x00 },
+  srl:  { opcode: 0x33, funct3: 0x5, funct7: 0x00 },
+  sra:  { opcode: 0x33, funct3: 0x5, funct7: 0x20 },
+  or:   { opcode: 0x33, funct3: 0x6, funct7: 0x00 },
+  and:  { opcode: 0x33, funct3: 0x7, funct7: 0x00 },
 };
 
 const REGISTER_ALIASES: Record<string, number> = {
@@ -173,6 +178,66 @@ export class AssemblerService {
         this.reg(args[1], line),
         this.branchTarget(args[2], 13, line, pc, labels),
       );
+    } else if (mnemonic === 'blt') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeB(
+        0x63,
+        0x4,
+        this.reg(args[0], line),
+        this.reg(args[1], line),
+        this.branchTarget(args[2], 13, line, pc, labels),
+      );
+    } else if (mnemonic === 'bge') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeB(
+        0x63,
+        0x5,
+        this.reg(args[0], line),
+        this.reg(args[1], line),
+        this.branchTarget(args[2], 13, line, pc, labels),
+      );
+    } else if (mnemonic === 'bltu') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeB(
+        0x63,
+        0x6,
+        this.reg(args[0], line),
+        this.reg(args[1], line),
+        this.branchTarget(args[2], 13, line, pc, labels),
+      );
+    } else if (mnemonic === 'bgeu') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeB(
+        0x63,
+        0x7,
+        this.reg(args[0], line),
+        this.reg(args[1], line),
+        this.branchTarget(args[2], 13, line, pc, labels),
+      );
+    } else if (mnemonic === 'lui') {
+      this.expectArgCount(mnemonic, args, 2, line);
+      word = this.encodeU(0x37, this.reg(args[0], line), this.imm(args[1], 20, line));
+    } else if (mnemonic === 'slli') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeShiftI(0x1, 0x00, this.reg(args[0], line), this.reg(args[1], line), this.shamt(args[2], line));
+    } else if (mnemonic === 'srli') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeShiftI(0x5, 0x00, this.reg(args[0], line), this.reg(args[1], line), this.shamt(args[2], line));
+    } else if (mnemonic === 'srai') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeShiftI(0x5, 0x20, this.reg(args[0], line), this.reg(args[1], line), this.shamt(args[2], line));
+    } else if (mnemonic === 'slti') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeI(0x13, 0x2, this.reg(args[0], line), this.reg(args[1], line), this.imm(args[2], 12, line));
+    } else if (mnemonic === 'xori') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeI(0x13, 0x4, this.reg(args[0], line), this.reg(args[1], line), this.imm(args[2], 12, line));
+    } else if (mnemonic === 'ori') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeI(0x13, 0x6, this.reg(args[0], line), this.reg(args[1], line), this.imm(args[2], 12, line));
+    } else if (mnemonic === 'andi') {
+      this.expectArgCount(mnemonic, args, 3, line);
+      word = this.encodeI(0x13, 0x7, this.reg(args[0], line), this.reg(args[1], line), this.imm(args[2], 12, line));
     } else if (mnemonic === 'jal') {
       this.expectArgCount(mnemonic, args, 2, line);
       word = this.encodeJ(0x6f, this.reg(args[0], line), this.branchTarget(args[1], 21, line, pc, labels));
@@ -240,6 +305,10 @@ export class AssemblerService {
       case 'c.lui':
         this.expectArgCount(mnemonic, args, 2, line);
         return this.cLui(this.reg(args[0], line), this.imm(args[1], 6, line), line);
+
+      case 'c.mv':
+        this.expectArgCount(mnemonic, args, 2, line);
+        return this.cMv(this.reg(args[0], line), this.reg(args[1], line), line);
 
       case 'c.add':
         this.expectArgCount(mnemonic, args, 2, line);
@@ -530,6 +599,25 @@ export class AssemblerService {
     ) >>> 0;
   }
 
+  private encodeShiftI(funct3: number, funct7: number, rd: number, rs1: number, shamt: number) {
+    return (
+      ((funct7 & 0x7f) << 25) |
+      ((shamt & 0x1f) << 20) |
+      ((rs1 & 0x1f) << 15) |
+      ((funct3 & 0x07) << 12) |
+      ((rd & 0x1f) << 7) |
+      0x13
+    ) >>> 0;
+  }
+
+  private encodeU(opcode: number, rd: number, imm: number) {
+    return (
+      ((imm & 0xfffff) << 12) |
+      ((rd & 0x1f) << 7) |
+      (opcode & 0x7f)
+    ) >>> 0;
+  }
+
   private encodeJ(opcode: number, rd: number, imm: number) {
     const encodedImm = imm & 0x1fffff;
     return (
@@ -590,9 +678,22 @@ export class AssemblerService {
     );
   }
 
+  private cMv(rd: number, rs2: number, line: number) {
+    if (rd === 0 || rs2 === 0) {
+      throw new BadRequestException(`line ${line}: c.mv registers cannot be x0`);
+    }
+    return (
+      (0b100 << 13) |
+      (0 << 12) |
+      ((rd & 0x1f) << 7) |
+      ((rs2 & 0x1f) << 2) |
+      0b10
+    );
+  }
+
   private cAdd(rd: number, rs2: number, line: number) {
     if (rd === 0 || rs2 === 0) {
-      throw new BadRequestException(`line ${line}: c.add/c.mv registers cannot be x0`);
+      throw new BadRequestException(`line ${line}: c.add registers cannot be x0`);
     }
     return (
       (0b100 << 13) |

@@ -71,7 +71,7 @@ beq x0, x0, 0`
         const parsedSettings = JSON.parse(savedSettings);
         setIdeSettings({
           ...parsedSettings,
-          maxSteps: Math.min(5000, Math.max(1, parsedSettings.maxSteps || DEFAULT_SETTINGS.maxSteps)),
+          maxSteps: Math.min(10000, Math.max(1, parsedSettings.maxSteps || DEFAULT_SETTINGS.maxSteps)),
         });
       } catch {
         localStorage.removeItem(SETTINGS_STORAGE_KEY);
@@ -332,7 +332,7 @@ beq x0, x0, 0`
                   showZeroRegisters={ideSettings.showZeroRegisters}
                 />
               ) : (
-                <MemoryMapPanel simulationModel={simulationModel} />
+                <MemoryMapPanel simulationModel={simulationModel} displayFormat={ideSettings.displayFormat} />
               )}
             </section>
 
@@ -358,7 +358,7 @@ beq x0, x0, 0`
                       Volver
                     </button>
                   </div>
-                  <MemoryMapPanel simulationModel={simulationModel} />
+                  <MemoryMapPanel simulationModel={simulationModel} displayFormat={ideSettings.displayFormat} />
                 </section>
 
                 <div

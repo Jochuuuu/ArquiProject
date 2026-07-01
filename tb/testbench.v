@@ -7,6 +7,7 @@ module testbench;
   reg          done;
   integer      cycle;
   integer      max_cycles;
+  reg [31:0]   last_pc;
 
   // instantiate device to be tested
   top dut(
@@ -93,28 +94,42 @@ module testbench;
   initial begin
     done = 0;
     cycle = 0;
-    max_cycles = 500;
+    last_pc = 32'h0;
+    max_cycles = 5000;
     if (!$value$plusargs("MAX_CYCLES=%d", max_cycles))
-      max_cycles = 500;
+      max_cycles = 5000;
     reset = 1; # 22;
     reset = 0;
   end
 
   task print_state;
+    integer i;
     begin
-      $display("Registers:");
-      $display("x1  = %0d", $signed(dut.rvcore.rf.rf[1]));
-      $display("x2  = %0d", $signed(dut.rvcore.rf.rf[2]));
-      $display("x3  = %0d", $signed(dut.rvcore.rf.rf[3]));
-      $display("x4  = %0d", $signed(dut.rvcore.rf.rf[4]));
-      $display("x5  = %0d", $signed(dut.rvcore.rf.rf[5]));
-      $display("x7  = %0d", $signed(dut.rvcore.rf.rf[7]));
-            $display("x8  = %0d", $signed(dut.rvcore.rf.rf[8]));
-
-      $display("x9  = %0d", $signed(dut.rvcore.rf.rf[9]));
-      $display("Memory:");
-      $display("mem[96]  = %0d", dut.dmem.RAM[24]);
-      $display("mem[100] = %0d", dut.dmem.RAM[25]);
+      $display("--- PC ---");
+      $display("PC (halt instr) = 0x%08h", last_pc - 4);
+      $display("PC (fetch now)  = 0x%08h", last_pc);
+      $display("--- Registers ---");
+      $display("x0  (zero) = %0d", $signed(dut.rvcore.rf.rf[0]));
+      $display("x1  (ra)   = %0d", $signed(dut.rvcore.rf.rf[1]));
+      $display("x2  (sp)   = %0d", $signed(dut.rvcore.rf.rf[2]));
+      $display("x3  (gp)   = %0d", $signed(dut.rvcore.rf.rf[3]));
+      $display("x4  (tp)   = %0d", $signed(dut.rvcore.rf.rf[4]));
+      $display("x5  (t0)   = %0d", $signed(dut.rvcore.rf.rf[5]));
+      $display("x6  (t1)   = %0d", $signed(dut.rvcore.rf.rf[6]));
+      $display("x7  (t2)   = %0d", $signed(dut.rvcore.rf.rf[7]));
+      $display("x8  (s0)   = %0d", $signed(dut.rvcore.rf.rf[8]));
+      $display("x9  (s1)   = %0d", $signed(dut.rvcore.rf.rf[9]));
+      $display("x10 (a0)   = %0d", $signed(dut.rvcore.rf.rf[10]));
+      $display("x11 (a1)   = %0d", $signed(dut.rvcore.rf.rf[11]));
+      $display("x12 (a2)   = %0d", $signed(dut.rvcore.rf.rf[12]));
+      $display("x13 (a3)   = %0d", $signed(dut.rvcore.rf.rf[13]));
+      $display("x14 (a4)   = %0d", $signed(dut.rvcore.rf.rf[14]));
+      $display("x15 (a5)   = %0d", $signed(dut.rvcore.rf.rf[15]));
+      $display("--- DMEM (words no-cero) ---");
+      for (i = 0; i < 64; i = i + 1) begin
+        if (dut.dmem.RAM[i] !== 32'h0 && ^dut.dmem.RAM[i] !== 1'bx)
+          $display("  mem[%3d] (word %2d) = %0d", i*4, i, $signed(dut.dmem.RAM[i]));
+      end
     end
   endtask
 
@@ -122,7 +137,7 @@ module testbench;
     wait(reset == 0);
     repeat(max_cycles + 10) @(negedge clk);
     if (!done) begin
-      $display("Simulation ended: timeout/status dump");
+      $display("Simulation ended: timeout at cycle %0d", cycle);
       print_state();
       $finish;
     end
@@ -137,7 +152,8 @@ module testbench;
   // check results
   always @(negedge clk) begin
     if (!reset) begin
-      cycle = cycle + 1;
+      if (^dut.rvcore.PCF !== 1'bx) last_pc = dut.rvcore.PCF;
+        cycle = cycle + 1;
       if ($test$plusargs("TRACE")) begin
         $display("TRACE cycle=%0d pc=%h rawInstrF=%h instrF=%h instrD=%h instrE=%h instrM=%h instrW=%h stallF=%b stallD=%b flushD=%b flushE=%b forwardAE=%b forwardBE=%b rdW=%0d regWriteW=%b resultW=%h memWrite=%b dataAdr=%h writeData=%h",
           cycle,
@@ -166,10 +182,13 @@ module testbench;
 
     if(MemWrite) begin
       $display("Store: mem[%0d] <= %0d", DataAdr, $signed(WriteData));
-      if(DataAdr === 100 & WriteData === 25) begin
+    end
+
+    // halt: beq x0,x0,0 completado en writeback
+    if (!reset && cycle > 5) begin
+      if (dut.rvcore.InstrW === 32'h00000063) begin
         done = 1;
-        $display("Simulation succeeded");
-        $display("Final store: mem[%0d] <= %0d", DataAdr, WriteData);
+        $display("Simulation finished (halt detected) at cycle %0d", cycle);
         #20;
         print_state();
         $finish;

@@ -3,12 +3,13 @@ import { RiscvModel } from "@/domain/riscv/model";
 
 interface MemoryMapPanelProps {
   simulationModel: RiscvModel | null;
+  displayFormat?: "hex" | "dec";
 }
 
 const BYTES_PER_ROW = 16;
 const PAGE_SIZE = 64;
 
-export function MemoryMapPanel({ simulationModel }: MemoryMapPanelProps) {
+export function MemoryMapPanel({ simulationModel, displayFormat = "hex" }: MemoryMapPanelProps) {
   const [page, setPage] = useState(0);
   const [view, setView] = useState<"program" | "data">("program");
 
@@ -59,7 +60,9 @@ export function MemoryMapPanel({ simulationModel }: MemoryMapPanelProps) {
           </span>
           {view === "data" && lastWrite && (
             <span className="memory-range">
-              store[{lastWrite.cycle}]: 0x{lastWrite.address.toString(16).padStart(8, "0").toUpperCase()} = 0x{lastWrite.value.toString(16).padStart(8, "0").toUpperCase()}
+              store[{lastWrite.cycle}]: {displayFormat === "hex"
+                ? `0x${lastWrite.address.toString(16).padStart(8, "0").toUpperCase()} = 0x${lastWrite.value.toString(16).padStart(8, "0").toUpperCase()}`
+                : `addr ${lastWrite.address} = ${lastWrite.value >>> 0}`}
             </span>
           )}
         </div>
@@ -127,7 +130,9 @@ export function MemoryMapPanel({ simulationModel }: MemoryMapPanelProps) {
                             : "memory-byte-cell--data"
                         }`}
                       >
-                        {byte.toString(16).toUpperCase().padStart(2, "0")}
+                        {displayFormat === "hex"
+                          ? byte.toString(16).toUpperCase().padStart(2, "0")
+                          : byte.toString(10).padStart(3, " ")}
                       </td>
                     );
                   })}

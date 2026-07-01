@@ -1,0 +1,40 @@
+0113    // low  de 0F000113 ; addi  x2,  x0, 240
+0F00    // high de 0F000113 ; addi  x2,  x0, 240
+0513    // low  de 00400513 ; addi  x10, x0, 4
+0040    // high de 00400513 ; addi  x10, x0, 4
+2029    // c.jal fib                ; compressed 16-bit
+2223    // low  de 06A02223 ; sw    x10, 100(x0)
+06A0    // high de 06A02223 ; sw    x10, 100(x0)
+0063    // low  de 00000063 ; beq   x0, x0, 0
+0000    // high de 00000063 ; beq   x0, x0, 0
+0E63    // low  de 02050E63 ; beq   x10, x0, base_ret
+0205    // high de 02050E63 ; beq   x10, x0, base_ret
+0293    // low  de FFF50293 ; addi  x5,  x10, -1
+FFF5    // high de FFF50293 ; addi  x5,  x10, -1
+8A63    // low  de 02028A63 ; beq   x5, x0, base_ret
+0202    // high de 02028A63 ; beq   x5, x0, base_ret
+1151    // c.addi x2, -12           ; compressed 16-bit
+2423    // low  de 00112423 ; sw    x1, 8(x2)
+0011    // high de 00112423 ; sw    x1, 8(x2)
+2223    // low  de 00A12223 ; sw    x10, 4(x2)
+00A1    // high de 00A12223 ; sw    x10, 4(x2)
+0513    // low  de FFF50513 ; addi  x10, x10, -1
+FFF5    // high de FFF50513 ; addi  x10, x10, -1
+F0EF    // low  de FE7FF0EF ; jal   x1, fib
+FE7F    // high de FE7FF0EF ; jal   x1, fib
+2023    // low  de 00A12023 ; sw    x10, 0(x2)
+00A1    // high de 00A12023 ; sw    x10, 0(x2)
+2503    // low  de 00412503 ; lw    x10, 4(x2)
+0041    // high de 00412503 ; lw    x10, 4(x2)
+0513    // low  de FFE50513 ; addi  x10, x10, -2
+FFE5    // high de FFE50513 ; addi  x10, x10, -2
+F0EF    // low  de FD7FF0EF ; jal   x1, fib
+FD7F    // high de FD7FF0EF ; jal   x1, fib
+2303    // low  de 00012303 ; lw    x6, 0(x2)
+0001    // high de 00012303 ; lw    x6, 0(x2)
+951A    // c.add x10, x6            ; compressed 16-bit
+2083    // low  de 00812083 ; lw    x1, 8(x2)
+0081    // high de 00812083 ; lw    x1, 8(x2)
+0131    // c.addi x2, 12            ; compressed 16-bit
+8082    // c.jr  x1                 ; compressed 16-bit
+8082    // c.jr  x1                 ; compressed 16-bit
